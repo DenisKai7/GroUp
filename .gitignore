@@ -11,4 +11,4 @@ src/controller/activity_controller.js
 src/validation/activity_validation.js
 src/application/database.js
 test/activity.test.js
-docs/activity.md
+docs/model.md

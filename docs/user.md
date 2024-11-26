@@ -2,9 +2,9 @@
 
 ## Register User Api
 
-Endpoint: POST api/users/register
+Endpoint: POST api/users
 
-Requset Body:
+Request Body:
 
 ```json
 {
@@ -37,7 +37,7 @@ Response Body Erros:
 
 Endpoint: POST api/users/login
 
-Requset Body:
+Request Body:
 
 ```json
 {
@@ -46,13 +46,13 @@ Requset Body:
 }
 ```
 
-Requset Body Success:
+Response Body Success:
 
 ```json
 {
   "data": {
     "accessToken": "jwt_access_token",
-    "refreshToken": "jwt_refresh_token"
+    "status": "active"
   }
 }
 ```
@@ -71,7 +71,7 @@ Endpoint: PATCH api/users/current
 
 - Authorization: Bearer "your_accessToken"
 
-Requset Body:
+Request Body:
 
 ```json
 {
@@ -81,7 +81,7 @@ Requset Body:
 }
 ```
 
-Requset Body Success:
+Response Body Success:
 
 ```json
 {
@@ -108,7 +108,7 @@ Headers:
 
 - Authorization: Bearer "your_accessToken"
 
-Requset Body:
+Request Body:
 
 ```json
 {
@@ -116,13 +116,14 @@ Requset Body:
 }
 ```
 
-Requset Body Success:
+Respone Body Success:
 
 ```json
 {
   "data": {
     "email": "yuki@gmail.com",
-    "name": "yuki new"
+    "name": "yuki new",
+    "status": "active"
   }
 }
 ```
@@ -135,33 +136,6 @@ Response Body Erros:
 }
 ```
 
-## Refres Token User Api
-
-Endpoint: POST api/users/refreshToken
-
-Headers:
-
-- Authorization: Bearer "your_refreshToken"
-
-Requset Body Success:
-
-```json
-{
-  "data": {
-    "accessToken": "jwt_access_token",
-    "refreshToken": "jwt_refresh_token"
-  }
-}
-```
-
-Response Body Erros:
-
-```json
-{
-  "errors": "Unauthorized"
-}
-```
-
 ## Logout User Api
 
 Endpoint: DELETE api/users/logout
@@ -170,7 +144,7 @@ Headers:
 
 - Authorization: Bearer "your_accessToken"
 
-Requset Body Success:
+Request Body Success:
 
 ```json
 {

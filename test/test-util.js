@@ -1,25 +1,47 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { db } from "../src/application/firestore.js";
+require('dotenv').config();
 
 const userCollection = db.collection("users");
-const activityCollection = db.collection("activities");
+// const activityCollection = db.collection("activities");
 
 export const removeTestUser = async () => {
-    const userSnapshot = await userCollection.where("username", "==", "test").get();
-    userSnapshot.forEach(async (doc) => {
-        await doc.ref.delete();
-    });
+    const userDoc = await userCollection.doc("test").get();
+    if (userDoc.exists) {
+        await userCollection.doc("test").delete();
+    }
 };
 
 export const createTestUser = async () => {
     const hashedPassword = await bcrypt.hash("xxx", 10);
     await userCollection.doc("test").set({
-        username: "test",
+        email: "test",
         password: hashedPassword,
         name: "test",
-        token: "test",
+        status: "active",
     });
 };
+
+export const createAndLoginTestUser = async () => {
+    const hashedPassword = await bcrypt.hash("xxx", 10);
+
+    const accessToken = jwt.sign(
+        { email: "test", name: "test" }, 
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "3d" } 
+    );
+
+    await userCollection.doc("test").set({
+        email: "test",
+        password: hashedPassword,
+        name: "test",
+        status: "active",
+    });
+
+    return accessToken; 
+};
+
 
 export const getUser = async () => {
     const userDoc = await userCollection.doc("test").get();
@@ -30,7 +52,7 @@ export const getUser = async () => {
 };
 
 // export const removeAllActivityUser = async () => {
-//     const activitySnapshot = await activityCollection.where("username", "==", "test").get();
+//     const activitySnapshot = await activityCollection.where("email", "==", "test").get();
 //     activitySnapshot.forEach(async (doc) => {
 //         await doc.ref.delete();
 //     });
@@ -38,7 +60,7 @@ export const getUser = async () => {
 
 // export const createTestActivityUser = async () => {
 //     await activityCollection.add({
-//         username: "test",
+//         email: "test",
 //         title: "test",
 //         information: "test",
 //         day: "test",
@@ -50,7 +72,7 @@ export const getUser = async () => {
 // export const createManyTestActivityUser = async () => {
 //     for (let i = 1; i <= 5; i++) {
 //         await activityCollection.add({
-//             username: "test",
+//             email: "test",
 //             title: `test${i}`,
 //             information: "test",
 //             day: `hari${i}`,
@@ -61,7 +83,7 @@ export const getUser = async () => {
 // };
 
 // export const getTestActivity = async () => {
-//     const activitySnapshot = await activityCollection.where("username", "==", "test").limit(1).get();
+//     const activitySnapshot = await activityCollection.where("email", "==", "test").limit(1).get();
 //     if (activitySnapshot.empty) {
 //         return null;
 //     }

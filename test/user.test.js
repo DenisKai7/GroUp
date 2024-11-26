@@ -1,7 +1,7 @@
 import supertest from "supertest";
 import { web } from "../src/application/web.js";
 import { logger } from "../src/application/loggin.js";
-import { createTestUser, getUser, removeTestUser } from "./test-util.js";
+import { createAndLoginTestUser, createTestUser, getUser, removeTestUser } from "./test-util.js";
 import bcrypt from "bcrypt";
 
 
@@ -15,13 +15,13 @@ describe ("POST /api/users", function () {
         const result = await supertest(web)
         .post("/api/users")
         .send({
-            username: "test",
+            email: "test",
             password: "xxx",
             name: "test"
         })
  
         expect(result.status).toBe(200);
-        expect(result.body.data.username).toBe("test");
+        expect(result.body.data.email).toBe("test");
         expect(result.body.data.name).toBe("test");
         expect(result.body.data.password).toBeUndefined();
 
@@ -30,7 +30,7 @@ describe ("POST /api/users", function () {
         const result = await supertest(web)
         .post("/api/users")
         .send({
-            username: "",
+            email: "",
             password: "",
             name: ""
         })
@@ -44,20 +44,20 @@ describe ("POST /api/users", function () {
         let result = await supertest(web)
         .post("/api/users")
         .send({
-            username: "test",
+            email: "test",
             password: "xxx",
             name: "test"
         })
         logger.info(result.body);
         expect(result.status).toBe(200);
-        expect(result.body.data.username).toBe("test");
+        expect(result.body.data.email).toBe("test");
         expect(result.body.data.name).toBe("test");
         expect(result.body.data.password).toBeUndefined();
 
         result = await supertest(web)
         .post("/api/users")
         .send({
-            username: "test",
+            email: "test",
             password: "xxx",
             name: "test"
         })
@@ -80,20 +80,21 @@ describe ("POST /api/users/login", function () {
         const result = await supertest(web)
         .post("/api/users/login")
         .send({
-            username: "test",
+            email: "test",
             password: "xxx",
         });
 
         logger.info(result.body);
         expect(result.status).toBe(200);
-        expect(result.body.data.token).toBeDefined();
-        expect(result.body.data.token).not.toBe("test");
+        expect(result.body.data.accessToken).toBeDefined();
+        expect(result.body.data.status).toBe("active");
+        expect(result.body.data.accessToken).not.toBe("test");
     });
     it("should reject data is not be empty", async () => {
         const result = await supertest(web)
         .post("/api/users/login")
         .send({
-            username: "",
+            email: "",
             password: "",
         });
 
@@ -105,7 +106,7 @@ describe ("POST /api/users/login", function () {
         const result = await supertest(web)
         .post("/api/users/login")
         .send({
-            username: "test",
+            email: "test",
             password: "bbcv",
         });
 
@@ -116,8 +117,11 @@ describe ("POST /api/users/login", function () {
 });
 
 describe("GET /api/users/current", function() {
+
+    let token;
+
     beforeEach(async () => {
-        await createTestUser();
+        token = await createAndLoginTestUser();
     });
     afterEach(async () => {
         await removeTestUser();
@@ -125,17 +129,17 @@ describe("GET /api/users/current", function() {
     it("should can get user", async () => {
         const result = await supertest(web)
         .get("/api/users/current")
-        .set("authorization", "test");
+        .set("Authorization", `Bearer ${token}`);
 
         logger.info(result.body);
         expect(result.status).toBe(200);
-        expect(result.body.data.username).toBe("test");
+        expect(result.body.data.email).toBe("test");
         expect(result.body.data.name).toBe("test");
     });
-    it("should reject token is not found", async () => {
+    it("should reject accessToken is not found", async () => {
         const result = await supertest(web)
         .get("/api/users/current")
-        .set("authorization", "testi");
+        .set("Authorization", "testi");
 
         logger.info(result.body);
         expect(result.status).toBe(401);
@@ -145,8 +149,9 @@ describe("GET /api/users/current", function() {
 });
 
 describe("PATCH /api/users/current", function() {
+    let token;
     beforeEach(async () => {
-        await createTestUser();
+        token = await createAndLoginTestUser();
     });
     afterEach(async () => {
         await removeTestUser();
@@ -154,7 +159,7 @@ describe("PATCH /api/users/current", function() {
     it("should can update name and password", async () => {
         const result = await supertest(web)
         .patch("/api/users/current")
-        .set("authorization", "test")
+        .set("Authorization", `Bearer ${token}`)
         .send({
             name: "gue",
             password: "tauahhhh"
@@ -162,7 +167,7 @@ describe("PATCH /api/users/current", function() {
 
         logger.info(result.body);
         expect(result.status).toBe(200);
-        expect(result.body.data.username).toBe("test");
+        expect(result.body.data.email).toBe("test");
         expect(result.body.data.name).toBe("gue");
 
         const user = await getUser();
@@ -171,35 +176,35 @@ describe("PATCH /api/users/current", function() {
     it("should can update name", async () => {
         const result = await supertest(web)
         .patch("/api/users/current")
-        .set("authorization", "test")
+        .set("Authorization", `Bearer ${token}`)
         .send({
             name: "gue",
         })
 
         logger.info(result.body);
         expect(result.status).toBe(200);
-        expect(result.body.data.username).toBe("test");
+        expect(result.body.data.email).toBe("test");
         expect(result.body.data.name).toBe("gue");
     });
 
     it("should can update password", async () => {
         const result = await supertest(web)
         .patch("/api/users/current")
-        .set("authorization", "test")
+        .set("Authorization", `Bearer ${token}`)
         .send({
             password: "tauahhhh"
         })
 
         logger.info(result.body);
         expect(result.status).toBe(200);
-        expect(result.body.data.username).toBe("test");
+        expect(result.body.data.email).toBe("test");
         const user = await getUser();
         expect(await bcrypt.compare("tauahhhh", user.password)).toBe(true);
     });
     it("should reject update", async () => {
         const result = await supertest(web)
         .patch("/api/users/current")
-        .set("authorization", "testi")
+        .set("Authorization", "testi")
         .send({});
 
         logger.info(result.body);
@@ -209,8 +214,9 @@ describe("PATCH /api/users/current", function() {
 });
 
 describe("DELETE /api/users/logout", function() {
+    let token;
     beforeEach(async () => {
-        await createTestUser();
+        token = await createAndLoginTestUser();
     });
     afterEach(async () => {
         await removeTestUser();
@@ -218,21 +224,24 @@ describe("DELETE /api/users/logout", function() {
     it("should can logout", async () => {
         const result = await supertest(web)
         .delete("/api/users/logout")
-        .set("authorization", "test");
+        .set("Authorization", `Bearer ${token}`);
 
         logger.info(result.body);
         expect(result.status).toBe(200);
         expect(result.body.data).toBe("ok");
 
         const user = await getUser();
-        expect(user.token).toBeNull();
+        expect(user.status).toBe("inactive");
     });
-    it("should reject logout token is invalid", async () => {
+    it("should reject logout accessToken is invalid", async () => {
         const result = await supertest(web)
         .delete("/api/users/logout")
-        .set("authorization", "testi");
+        .set("Authorization", "testi");
 
         logger.info(result.body);
         expect(result.status).toBe(401);
+        
+        const user = await getUser();
+        expect(user.status).toBe("active");
     });
 });
