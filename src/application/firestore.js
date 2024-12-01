@@ -1,4 +1,4 @@
-const { Firestore } = require('@google-cloud/firestore');
+import { Firestore } from '@google-cloud/firestore';
 
 // const db = new Firestore();
 const db = new Firestore({
@@ -7,4 +7,4 @@ const db = new Firestore({
 });
 
 
-module.exports = { db };
+export { db };

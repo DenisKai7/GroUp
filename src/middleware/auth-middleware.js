@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
-import { logout } from "../service/user_service.js"; 
-require('dotenv').config();
+import userService from "../service/user_service.js"; 
+import dotenv from "dotenv";
+dotenv.config();
 
 export const authMiddleware = async (req, res, next) => {
     const token = req.headers.authorization?.split(" ")[1]; 
@@ -20,7 +21,7 @@ export const authMiddleware = async (req, res, next) => {
             const email = req.headers.authorization?.split(" ")[1]; 
 
             try {
-                await logout(email); 
+                await userService.logout(email); 
 
                 return res.status(401).json({
                     errors: "Access token expired, please login again",
