@@ -7,8 +7,8 @@
     "node": "18.x"
   },
   "scripts": {
-    "start": "node src/server.js",
-    "start:prod": "NODE_ENV=production PORT=0.0.0.0 node src/client.js",
+    "start:dev": "node src/server.js",
+    "start:prod": "NODE_ENV=production node src/server.js",
     "test": "jest -i"
   },
   "jest": {

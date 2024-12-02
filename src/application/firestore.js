@@ -7,4 +7,6 @@ const db = new Firestore({
 });
 
 
-export { db };
+export { 
+  db
+};
