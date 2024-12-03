@@ -132,8 +132,6 @@ fun EditScreen(navController: NavController,viewModel: ProfileViewModel) {
             }
         }
 
-
-
         // Form fields
         Column(
             modifier = Modifier

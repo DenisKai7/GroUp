@@ -31,9 +31,16 @@ class ProfileViewModel(): ViewModel() {
         gender = newGender
         address = newAddress
         profileImageUri = newProfileImageUri
+        extractNameFromEmail()
     }
-    fun updateImage(uri: Uri
-    ){
+    fun updateImage(uri: Uri) {
         profileImageUri = uri
     }
+    fun extractNameFromEmail() {
+        if (email.contains("@")) {
+            val extractedName = email.substringBefore("@")
+            name = extractedName.replaceFirstChar { it.uppercaseChar() } // Kapitalisasi huruf pertama
+        }
+    }
+
 }

@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.projectcapstone.ui.theme.ProjectCapstoneTheme
+import com.example.projectcapstone.ui.theme.UserViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +33,7 @@ class MainActivity : ComponentActivity() {
                             LoginScreen(navController )
                         }
                         composable(Routes.HomePage) {
-                            HomePage(navController, viewModel = profileViewModel )
+                            HomePage(navController, viewModel = UserViewModel() )
                         }
                         composable(Routes.RegisterScreen) {
                             RegisterScreen(navController )

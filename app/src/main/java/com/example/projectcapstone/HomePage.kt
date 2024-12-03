@@ -9,9 +9,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Article
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -23,15 +22,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.Navigator
 import androidx.navigation.compose.rememberNavController
+import com.example.projectcapstone.ui.theme.UserViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 // Main Screen
 @Composable
-fun HomePage(navController: NavController, viewModel: ProfileViewModel) {
+fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel()) {
     val scrollState = rememberScrollState()
     val date = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale("id")).format(Date())
 
@@ -71,19 +71,19 @@ fun HomePage(navController: NavController, viewModel: ProfileViewModel) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Greeting Section
+
             Text(
-                text = "Hallo,",
+                text = "Hallo, ${viewModel.extractNameFromEmail()}",
                 color = Color(0xFF388E3C),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )
-            Text(
-                text = viewModel.name,
-                color = Color(0xFF388E3C),
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
-            )
+//            Text(
+//                text = viewModel.name,
+//                color = Color(0xFF388E3C),
+//                fontSize = 24.sp,
+//                fontWeight = FontWeight.Bold
+//            )
             Text(
                 text = "Sudah cek tumbuh kembang anak hari ini?",
                 color = Color.DarkGray,
@@ -111,7 +111,7 @@ fun HomePage(navController: NavController, viewModel: ProfileViewModel) {
                         .height(200.dp)
                         .background(Color(0xFF76FF03), shape = RoundedCornerShape(8.dp))
                 ) {
-                    // Tambahkan konten untuk kartu hijau jika diperlukan
+
                 }
             }
 
@@ -127,7 +127,7 @@ fun HomePage(navController: NavController, viewModel: ProfileViewModel) {
                         .height(200.dp)
                         .background(Color(0xFFFFEB3B), shape = RoundedCornerShape(8.dp))
                 ) {
-                    // Tambahkan konten untuk kartu kuning jika diperlukan
+
                 }
                 Box(
                     modifier = Modifier
@@ -135,7 +135,7 @@ fun HomePage(navController: NavController, viewModel: ProfileViewModel) {
                         .height(200.dp)
                         .background(Color(0xFF03A9F4), shape = RoundedCornerShape(8.dp))
                 ) {
-                    // Tambahkan konten untuk kartu biru jika diperlukan
+
                 }
             }
 
@@ -177,6 +177,10 @@ fun HomePage(navController: NavController, viewModel: ProfileViewModel) {
         BottomNavigationBar(modifier = Modifier.align(Alignment.BottomCenter), navController)
     }
 }
+//fun extractNameFromEmail(email: String): String {
+//    return email.substringBefore('@').replaceFirstChar { it.uppercase() }
+//}
+
 
 // Bottom Navigation Bar
 @Composable
@@ -197,16 +201,8 @@ fun BottomNavigationBar(modifier: Modifier = Modifier, navController: NavControl
             unselectedContentColor = Color.Black,
             onClick = {  navController.navigate(Routes.HomePage) }
         )
-//        BottomNavigationItem(
-//            icon = { Icon(Icons.Filled.Search, contentDescription = "Search") },
-//            label = { Text("Search") },
-//            selected = false,
-//            selectedContentColor = Color.Yellow,
-//            unselectedContentColor = Color.Gray,
-//            onClick = { navController.navigate("StatusCheckScreen") }
-//        )
         BottomNavigationItem(
-            icon = { Icon(Icons.Filled.Article, contentDescription = "Articles") },
+            icon = { Icon(Icons.Filled.Check, contentDescription = "Articles") },
             label = { Text("Articles") },
             selected = false,
             onClick = { navController.navigate("StatusCheckScreen") }
@@ -221,10 +217,10 @@ fun BottomNavigationBar(modifier: Modifier = Modifier, navController: NavControl
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun HomePreview() {
-    val navController = rememberNavController()
-    val viewModel = ProfileViewModel()
-    HomePage(navController = navController, viewModel = viewModel)
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun HomePreview() {
+//    val navController = rememberNavController()
+//    val viewModel = ProfileViewModel()
+//    HomePage(navController = navController, viewModel = viewModel)
+//}

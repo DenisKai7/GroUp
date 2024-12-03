@@ -1,5 +1,6 @@
 package com.example.projectcapstone
 
+import android.widget.Toast
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
@@ -20,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -29,14 +32,21 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.projectcapstone.ui.theme.ProjectCapstoneTheme
+import com.example.projectcapstone.ui.theme.UserViewModel
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(navController: NavController,viewModel: UserViewModel = viewModel(), ViewModel:ProfileViewModel = viewModel()) {
     var email by remember { mutableStateOf("") }
     var password by remember{ mutableStateOf("") }
+    var loginError = remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
+
     Box(modifier = Modifier.fillMaxSize()) {
         BackgroundShapes()
 
@@ -103,28 +113,41 @@ fun LoginScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Forgot Password Text
-            Text(
-                text = "Lupa Password?",
-                color = Color.Blue,
-                fontSize = 14.sp,
-                modifier = Modifier.align(Alignment.End)
-                    .clickable{
-                        navController.navigate("")
-                    },
-
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
             // Login Button
             Button(
-                onClick = { navController.navigate("HomePage")  },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF66BB6A)),
-                modifier = Modifier.fillMaxWidth().height(48.dp)
+                onClick = {
+                    isLoading = true
+                    viewModel.login(email, password) { success, errorMessage ->
+                        isLoading = false
+                        if (success) {
+                            ViewModel.email = email
+                            ViewModel.extractNameFromEmail()
+                            navController.navigate("HomePage")
+                        } else {
+                            Toast.makeText(
+                                context,
+                                errorMessage ?: "Login gagal",
+                                Toast.LENGTH_LONG
+                            ).show()
+
+
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !isLoading
             ) {
-                Text(text = "Masuk", color = Color.White, fontSize = 16.sp)
+                if (isLoading) {
+                    CircularProgressIndicator(color = Color.White, modifier = Modifier.size(20.dp))
+                } else {
+                    Text(text = "Masuk", color = Color.White, fontSize = 16.sp)
+                }
             }
+
+            if (loginError.value.isNotEmpty()){
+                Text(text = loginError.value, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
+            }
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -135,7 +158,7 @@ fun LoginScreen(navController: NavController) {
                     fontSize = 14.sp,
 
 
-                )
+                    )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "daftar disini!",
