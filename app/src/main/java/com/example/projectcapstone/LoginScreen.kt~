@@ -65,16 +65,16 @@ fun LoginScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(24.dp))
 
             // Email kolom
-//            OutlinedTextField(
-//                value = email,
-//                onValueChange = {email = it},
-//                label = { Text("Alamat Email") },
-//                leadingIcon = {
-//                    Icon(imageVector = Icons.Default.Email, contentDescription = "Email Icon")
-//                },
-//                placeholder = { Text("Masukkan Alamat Email") },
-//                modifier = Modifier.fillMaxWidth()
-//            )
+            OutlinedTextField(
+                value = email,
+                onValueChange = {email = it},
+                label = { Text("Alamat Email") },
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Email, contentDescription = "Email Icon")
+                },
+                placeholder = { Text("Masukkan Alamat Email") },
+                modifier = Modifier.fillMaxWidth()
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
