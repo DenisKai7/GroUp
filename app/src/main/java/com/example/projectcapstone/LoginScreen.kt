@@ -80,26 +80,26 @@ fun LoginScreen(navController: NavController) {
 
             // Password kolomnya
             var passwordVisible by remember { mutableStateOf(false) }
-            OutlinedTextField(
-                value = password,
-                onValueChange = {password = it},
-                label = { Text("Kata Sandi") },
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.Lock, contentDescription = "Password Icon")
-                },
-                placeholder = { Text("Masukkan Kata Sandi") },
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                trailingIcon = {
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(
-                            imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                            contentDescription = if (passwordVisible) "Hide Password" else "Show Password"
-                        )
-                    }
-                },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-            )
+//            OutlinedTextField(
+//                value = password,
+//                onValueChange = {password = it},
+//                label = { Text("Kata Sandi") },
+//                leadingIcon = {
+//                    Icon(imageVector = Icons.Default.Lock, contentDescription = "Password Icon")
+//                },
+//                placeholder = { Text("Masukkan Kata Sandi") },
+//                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+//                trailingIcon = {
+//                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+//                        Icon(
+//                            imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+//                            contentDescription = if (passwordVisible) "Hide Password" else "Show Password"
+//                        )
+//                    }
+//                },
+//                modifier = Modifier.fillMaxWidth(),
+//                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+//            )
 
             Spacer(modifier = Modifier.height(8.dp))
 
