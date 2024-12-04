@@ -197,6 +197,8 @@ fun RegisterScreen(
                     color = Color.Red,
                     fontWeight = FontWeight.Bold
                 )
+
+                else -> {}
             }
         }
     }

@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 
 class UserViewModel : ViewModel() {
 
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
@@ -88,21 +89,16 @@ class UserViewModel : ViewModel() {
             errorResponse.errors?.values?.joinToString(", ") ?: "Unknown error"
         } catch (jsonException: Exception) {
             if (errorBody.contains("is not allowed", ignoreCase = true)) {
-                // Contoh parsing manual untuk error tertentu
                 "Email atau password tidak valid"
             } else {
-                // Gunakan error mentah jika semua parsing gagal
                 errorBody
             }
         }
     }
 
-
     data class ErrorResponse(
         val errors: Map<String, String>? = null
     )
-
-
 
     var email by mutableStateOf("")
         private set
