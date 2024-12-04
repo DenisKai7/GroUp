@@ -1,10 +1,12 @@
 package com.example.projectcapstone
 
+// Import yang relevan
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -13,6 +15,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,8 +26,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -32,7 +36,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun EditScreen(navController: NavController, viewModel: ProfileViewModel) {
@@ -50,19 +55,20 @@ fun EditScreen(navController: NavController, viewModel: ProfileViewModel) {
 
     val scrollState = rememberScrollState()
 
+    // Bagian Column untuk keseluruhan layar
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .verticalScroll(scrollState)
     ) {
-        // Header with back button and profile image
+        // Header dengan latar belakang hijau
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
-                .background(Color(0xFF69E56E))
+                .height(150.dp)
+                .background(Color(0xFF69E56E)) // Warna hijau
         ) {
+            // Tombol kembali dan logo
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -83,36 +89,47 @@ fun EditScreen(navController: NavController, viewModel: ProfileViewModel) {
                     modifier = Modifier.size(50.dp)
                 )
             }
-
-
         }
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()
-                .padding(top = 0.dp)
-        ) {
-            AsyncImage(
-                model = profileImageUri ?: ImageRequest.Builder(LocalContext.current)
-                    .data("https://example.com/profile_image.png")
-                    .build(),
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(CircleShape)
-                    .background(Color.Gray),
-                contentScale = ContentScale.Crop
-            )
 
-            Button(
-                onClick = { launcher.launch("image/*") },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF02A9F1)),
-                modifier = Modifier.padding(top = 8.dp)
+        // Bagian untuk gambar profil
+        Box(
+            contentAlignment = Alignment.Center, // Pusatkan gambar di tengah
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(y = (-50).dp) // Geser ke atas agar berada di depan latar hijau
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(100.dp) // Ukuran lingkaran gambar
+                    .clip(CircleShape)
+                    .background(Color.White) // Warna latar belakang lingkaran gambar
+                    .shadow(5.dp, CircleShape) // Tambahkan bayangan untuk efek depan
             ) {
-                Text(text = "Change Photo", color = Color.White)
+                AsyncImage(
+                    model = profileImageUri ?: ImageRequest.Builder(LocalContext.current)
+                        .data("https://example.com/profile_image.png")
+                        .build(),
+                    contentDescription = "Profile Picture",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
             }
         }
 
-        // Form fields
+        // Tombol ganti foto
+        Button(
+            onClick = { launcher.launch("image/*") },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF02A9F1)),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+        ) {
+            Text(text = "Change Photo", color = Color.White)
+        }
+
+        // Form field
+        Spacer(modifier = Modifier.height(16.dp))
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -126,7 +143,7 @@ fun EditScreen(navController: NavController, viewModel: ProfileViewModel) {
             ProfileTextField(label = "E-mail", value = email, onValueChange = { email = it })
         }
 
-        // Save Button
+        // Tombol simpan
         Button(
             onClick = {
                 viewModel.saveProfile(
@@ -145,10 +162,18 @@ fun EditScreen(navController: NavController, viewModel: ProfileViewModel) {
             Text(text = "Save", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
         }
     }
+
 }
 
 @Composable
-fun ProfileTextField(label: String, value: String, onValueChange: (String) -> Unit) {
+fun ProfileTextField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    isPasswordField: Boolean = false
+) {
+    var passwordVisible by remember { mutableStateOf(false) }
+
     Column(modifier = Modifier.padding(vertical = 8.dp)) {
         Text(
             text = label,
@@ -160,6 +185,17 @@ fun ProfileTextField(label: String, value: String, onValueChange: (String) -> Un
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
+            visualTransformation = if (isPasswordField && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
+            trailingIcon = {
+                if (isPasswordField) {
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(
+                            imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                            contentDescription = if (passwordVisible) "Hide password" else "Show password"
+                        )
+                    }
+                }
+            },
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 textColor = Color.Black,
                 backgroundColor = Color.White,

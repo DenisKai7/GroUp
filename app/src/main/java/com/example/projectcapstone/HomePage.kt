@@ -25,13 +25,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.projectcapstone.ui.theme.UserViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 // Main Screen
 @Composable
-fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel()) {
+fun HomePage(navController: NavController, viewModel: ProfileViewModel = viewModel()) {
     val scrollState = rememberScrollState()
     val date = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale("id")).format(Date())
 
@@ -221,6 +220,7 @@ fun BottomNavigationBar(modifier: Modifier = Modifier, navController: NavControl
 @Composable
 fun HomePreview() {
     val navController = rememberNavController()
-    val viewModel = UserViewModel()
+    val viewModel = ProfileViewModel()
     HomePage(navController = navController, viewModel = viewModel)
 }
+

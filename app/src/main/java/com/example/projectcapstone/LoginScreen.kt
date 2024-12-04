@@ -101,7 +101,7 @@ fun LoginScreen(navController: NavController,viewModel: UserViewModel = viewMode
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(
+                        Icon(  
                             imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
                             contentDescription = if (passwordVisible) "Hide Password" else "Show Password"
                         )
