@@ -217,10 +217,10 @@ fun BottomNavigationBar(modifier: Modifier = Modifier, navController: NavControl
 }
 
 
-//@Preview(showBackground = true)
-//@Composable
-//fun HomePreview() {
-//    val navController = rememberNavController()
-//    val viewModel = ProfileViewModel()
-//    HomePage(navController = navController, viewModel = viewModel)
-//}
+@Preview(showBackground = true)
+@Composable
+fun HomePreview() {
+    val navController = rememberNavController()
+    val viewModel = UserViewModel()
+    HomePage(navController = navController, viewModel = viewModel)
+}
