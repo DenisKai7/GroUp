@@ -104,7 +104,7 @@ fun DataAnakCard() {
 
         Column(modifier = Modifier
             .padding(16.dp)
-            ) {
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween

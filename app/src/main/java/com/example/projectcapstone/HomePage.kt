@@ -223,4 +223,3 @@ fun HomePreview() {
     val viewModel = ProfileViewModel()
     HomePage(navController = navController, viewModel = viewModel)
 }
-

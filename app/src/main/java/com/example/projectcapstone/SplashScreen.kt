@@ -24,7 +24,6 @@ import kotlinx.coroutines.delay
 fun SplashScreen(navController: NavController) {
     val scale = remember { Animatable(0f) }
 
-    // Animasi logo dengan efek overshoot
     LaunchedEffect(key1 = true) {
         scale.animateTo(
             targetValue = 1f,

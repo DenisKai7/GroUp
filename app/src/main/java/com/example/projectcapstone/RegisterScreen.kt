@@ -179,7 +179,7 @@ fun RegisterScreen(
                 Text(text = "Daftar Diri", color = Color.White, fontSize = 16.sp)
             }
             if (isloading){
-                    CircularProgressIndicator(color = Color.Black, modifier = Modifier.size(20.dp))
+                CircularProgressIndicator(color = Color.Black, modifier = Modifier.size(20.dp))
             }else{
                 Text(text = "masuk", color = Color.White, fontSize = 16.sp)
             }
@@ -197,8 +197,6 @@ fun RegisterScreen(
                     color = Color.Red,
                     fontWeight = FontWeight.Bold
                 )
-
-                else -> {}
             }
         }
     }
