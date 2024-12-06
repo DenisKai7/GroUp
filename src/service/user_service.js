@@ -1,6 +1,6 @@
 import { validate } from "../validation/validation.js";
 import { db } from "../application/firestore.js";
-import { LoginUserValidation, getUserValidation, registerUserValidation, updateUserValidation } from "../validation/user_validation.js";
+import { LoginUserValidation, getUserValidation, registerUserValidation, updateUserValidation, logoutUserValidation } from "../validation/user_validation.js";
 import { ResponseError } from "../error/response_error.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -85,6 +85,7 @@ const update = async (request) => {
     const userDoc = userSnapshot.docs[0];
     const dataToUpdate = {};
 
+
     if (user.name) {
         dataToUpdate.name = user.name;
     }
@@ -96,12 +97,12 @@ const update = async (request) => {
     await userCollection.doc(userDoc.id).update(dataToUpdate);
     return {
         email: user.email,
-        name: user.name || userDoc.data().name,
+        name: user.name,
     };
 };
 
 const logout = async (email) => {
-    email = validate(getUserValidation, email);
+    email = validate(logoutUserValidation, email);
 
 
     const userDoc = await userCollection.doc(email).get();

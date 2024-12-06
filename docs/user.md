@@ -75,7 +75,6 @@ Request Body:
 
 ```json
 {
-  "email": "yuki@gmail.com", //optional
   "Password": "***** new", //optional
   "name": "yuki new" //optional
 }
@@ -108,14 +107,6 @@ Headers:
 
 - Authorization: Bearer "your_accessToken"
 
-Request Body:
-
-```json
-{
-  "email": "yuki@gmail.com"
-}
-```
-
 Respone Body Success:
 
 ```json
@@ -144,7 +135,7 @@ Headers:
 
 - Authorization: Bearer "your_accessToken"
 
-Request Body Success:
+Response Body Success:
 
 ```json
 {

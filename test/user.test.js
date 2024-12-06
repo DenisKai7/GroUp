@@ -173,12 +173,12 @@ describe("PATCH /api/users/current", function() {
         const user = await getUser();
         expect(await bcrypt.compare("tauahhhh", user.password)).toBe(true);
     });
-    it("should can update name", async () => {
+    it("should can update email and name", async () => {
         const result = await supertest(web)
         .patch("/api/users/current")
         .set("Authorization", `Bearer ${token}`)
         .send({
-            name: "gue",
+            name: "gue"
         })
 
         logger.info(result.body);
