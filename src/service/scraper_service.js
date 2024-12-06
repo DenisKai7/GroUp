@@ -30,15 +30,17 @@ const scrapeWebsite = async (website) => {
     const $ = cheerio.load(response.data);
     const articles = [];
 
-    $("span.ratiobox.box_thumb").each((i, element) => {
+    $("article").each((i, element) => {
 
       const title = $(element).find('span.ratiobox_content').find("img").attr("title") || 'kosong';
       const urlImage = $(element).find('span.ratiobox_content').children("img").attr('data-src') || 'kosong';
+      const urlWeb = $(element).find('a').attr('href') || 'kosong';
 
       if (title.toLowerCase().includes('stunting')) {
         articles.push({
           title,
           urlImage,
+          urlWeb,
           scrapedAt: new Date().toISOString()
         });
       }
@@ -67,7 +69,6 @@ const saveToFirestore = async (articles) => {
     await batchDelete.commit();
     console.log('Existing articles deleted.');
 
-    
     const batchSave = db.batch();
 
     for (const article of articles) {
