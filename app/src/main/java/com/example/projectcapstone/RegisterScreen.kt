@@ -1,7 +1,9 @@
 package com.example.projectcapstone
 
+import android.widget.Toast
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -14,6 +16,8 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
@@ -22,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -34,19 +39,17 @@ import com.example.projectcapstone.ui.theme.ProjectCapstoneTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.projectcapstone.ui.theme.UserViewModel
+import com.example.projectcapstone.data.api.Result
 
 @Composable
 fun RegisterScreen(
     navController: NavController,
-    viewModel: RegisterViewModel = viewModel()
+    viewModel: UserViewModel = viewModel(),
 ) {
-    // State untuk input
-    var email by remember { mutableStateOf("") }
-    var fullName by remember { mutableStateOf("") }
-    var phoneNumber by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
-
+    val isloading by viewModel.isLoading.collectAsState()
+    val registerResult by viewModel.registerResult.
+    collectAsState()
     Box(modifier = Modifier.fillMaxSize()) {
         BelakangShapes()
 
@@ -58,6 +61,13 @@ fun RegisterScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            var email by remember { mutableStateOf("") }
+            var password by remember{ mutableStateOf("") }
+            var fullName by remember { mutableStateOf("") }
+            var passwordVisible by remember { mutableStateOf(false) }
+            val registerSuccess = remember { mutableStateOf(false) }
+            val context = LocalContext.current
+
             Image(
                 painter = painterResource(id = R.drawable.logo), // Ganti dengan logo Anda
                 contentDescription = "Logo",
@@ -108,27 +118,6 @@ fun RegisterScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Input Nomor Telepon
-            Text(
-                text = "Nomor Telepon",
-                fontSize = 16.sp,
-                color = Color.DarkGray,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Start)
-            )
-            OutlinedTextField(
-                value = phoneNumber,
-                onValueChange = { phoneNumber = it }, // Update phoneNumber secara real-time
-                label = { Text("Masukkan Nomor Telepon") },
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.Call, contentDescription = "Call Icon")
-                },
-                placeholder = { Text("Masukkan Nomor Telepon") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
 
             // Input Kata Sandi
             Text(
@@ -165,15 +154,48 @@ fun RegisterScreen(
             // Tombol Daftar
             Button(
                 onClick = {
-                    // Validasi input atau navigasi
-                    if (email.isNotEmpty() && fullName.isNotEmpty() && phoneNumber.isNotEmpty() && password.isNotEmpty()) {
-                        navController.navigate(Routes.HomePage)
+                    viewModel.register(email, password, fullName){ success,errorMessage ->
+                        if(success){
+                            viewModel.email = email
+                            viewModel.extractNameFromEmail()
+                            navController.navigate("loginScreen")
+                        }else{
+                            Toast.makeText(
+                                context,
+                                errorMessage?:"Resgister anda gagal",
+                                Toast.LENGTH_LONG
+
+                            ).show()
+                        }
+
                     }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF66BB6A)),
-                modifier = Modifier.fillMaxWidth().height(48.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
             ) {
                 Text(text = "Daftar Diri", color = Color.White, fontSize = 16.sp)
+            }
+            if (isloading){
+                CircularProgressIndicator(color = Color.Black, modifier = Modifier.size(20.dp))
+            }else{
+                Text(text = "masuk", color = Color.White, fontSize = 16.sp)
+            }
+
+            when (registerResult) {
+                is Result.Loading -> CircularProgressIndicator()
+                is Result.Success -> {
+                    Text("Registrasi berhasil: ${(registerResult as Result.Success).data}")
+                    LaunchedEffect(Unit) {
+                        navController.navigate(Routes.LoginScreen)
+                    }
+                }
+                is Result.Error -> Text(
+                    text = (registerResult as Result.Error).error,
+                    color = Color.Red,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }
@@ -214,7 +236,7 @@ fun BelakangShapes() {
             lineTo(width, height * 0.5f)
             close()
         }
-        drawPath(path = greenPath, color = Color(0xFF66BB6A)) // Adjust the green shade if needed
+        drawPath(path = greenPath, color = Color(0xFF66BB6A))
     }
 }
 

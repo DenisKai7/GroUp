@@ -43,17 +43,17 @@ fun StatusCheckScreen(navController: NavController,) {
         ) {
             Column(
                 modifier = Modifier
-                    .weight(1f) // Take up remaining space
+                    .weight(1f)
                     .padding(start = 16.dp)
                     .padding(end = 16.dp)
                     .verticalScroll(scrollState)
             ) {
-                // Logo
+
                 LogoSection()
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Title
+
                 Text(
                     text = "Status Check",
                     fontSize = 20.sp,
@@ -63,16 +63,15 @@ fun StatusCheckScreen(navController: NavController,) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Data Anak Card
                 DataAnakCard()
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Grid Cards
+
                 GridCards()
             }
 
-            // Bottom Navigation positioned at the bottom without padding
+
             BottomNavigationBars(navController = navController)
         }
     }
@@ -104,7 +103,7 @@ fun DataAnakCard() {
 
         Column(modifier = Modifier
             .padding(16.dp)
-            ) {
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -171,7 +170,7 @@ fun GridCards() {
     Spacer(modifier = Modifier.height(8.dp))
 
     GridCard(
-        color = Color(0xFF86E80D), // Atur warna sesuai keinginan
+        color = Color(0xFF86E80D),
         text = "Kasus Serupa",
         modifier = Modifier.fillMaxWidth()
     )
