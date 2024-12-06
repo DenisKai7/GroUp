@@ -27,16 +27,18 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.projectcapstone.ui.theme.UserViewModel
 
 @Composable
 fun ProfileScreen(
     navController: NavController,
     isDarkTheme: Boolean,
     onThemeChange: (Boolean) -> Unit,
-    viewModel: ProfileViewModel
+    viewModel: UserViewModel
 ) {
-    val profileImageUri = viewModel.profileImageUri
-    val context = LocalContext.current
+    val name by remember { mutableStateOf(viewModel.name) }
+    val email by remember { mutableStateOf(viewModel.email) }
+    val profileImageUri by remember { mutableStateOf(viewModel.profileImageUri) }
 
 
     // UI untuk ProfileScreen
@@ -74,14 +76,14 @@ fun ProfileScreen(
                 contentScale = ContentScale.Crop
             )
             Text(
-                text = viewModel.name,
+                text = name,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(top = 8.dp)
             )
             Text(
-                text = viewModel.email,
+                text = email,
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
             )
@@ -107,7 +109,7 @@ fun ProfileScreen(
                 icon = Icons.Default.ExitToApp,
                 label = "Logout",
                 labelColor = Color.Red,
-                onClick = { navController.popBackStack() }
+                onClick = { navController.navigate(Routes.LoginScreen) }
             )
         }
     }
@@ -190,15 +192,15 @@ fun ThemeOption(isDarkTheme: Boolean, onThemeChange: (Boolean) -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun ProfilePreview() {
-    val mockViewModel = ProfileViewModel().apply {
-        name = "John Doe"
-        email = "john.doe@example.com"
-    }
-
-    ProfileScreen(
-        navController = rememberNavController(),
-        isDarkTheme = false,
-        onThemeChange = {},
-        viewModel = mockViewModel
-    )
+//    val mockViewModel = UserViewModel().apply {
+//        nameState.value = "John Doe"
+//        email = "john.doe@example.com"
+//    }
+//
+//    ProfileScreen(
+//        navController = rememberNavController(),
+//        isDarkTheme = false,
+//        onThemeChange = {},
+//        viewModel = mockViewModel
+//    )
 }

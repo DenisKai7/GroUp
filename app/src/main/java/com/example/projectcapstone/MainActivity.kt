@@ -23,31 +23,32 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            // Atur state untuk dark mode secara global
-            var isDarkTheme by remember { mutableStateOf(false) }
 
+            var isDarkTheme by remember { mutableStateOf(false) }
 
             ProjectCapstoneTheme(darkTheme = isDarkTheme) {
                 val navController = rememberNavController()
 
-                val profileViewModel = remember{ProfileViewModel()}
+
+                val profileViewModel = remember { UserViewModel() }
+
                 Surface(color = MaterialTheme.colorScheme.background) {
                     NavHost(
                         navController = navController,
-                        startDestination = "SplashScreen")
-                    { composable("SplashScreen") {
-                        SplashScreen(navController = navController)
-                    }
+                        startDestination = "SplashScreen"
+                    ) {
+                        composable("SplashScreen") {
+                            SplashScreen(navController = navController)
+                        }
                         composable(Routes.LoginScreen) {
-                            LoginScreen(navController = navController )
+                            LoginScreen(navController = navController)
                         }
                         composable(Routes.HomePage) {
                             HomePage(navController)
                         }
                         composable(Routes.RegisterScreen) {
-                            RegisterScreen(navController )
+                            RegisterScreen(navController)
                         }
-
                         composable(Routes.StatusCheckScreen) {
                             StatusCheckScreen(navController)
                         }
@@ -55,15 +56,17 @@ class MainActivity : ComponentActivity() {
                             ProfileScreen(
                                 navController = navController,
                                 isDarkTheme = isDarkTheme,
-                                onThemeChange = {isDarkTheme = !isDarkTheme},
+                                onThemeChange = { isDarkTheme = !isDarkTheme },
                                 viewModel = profileViewModel
                             )
                         }
                         composable(Routes.EditScreen) {
-                            EditScreen(navController = navController, viewModel = profileViewModel)
+                            EditScreen(
+                                navController = navController,
+                                viewModel = profileViewModel
+                            )
                         }
                     }
-
                 }
             }
         }

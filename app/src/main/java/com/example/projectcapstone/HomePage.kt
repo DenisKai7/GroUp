@@ -25,12 +25,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.projectcapstone.ui.theme.UserViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 // Main Screen
 @Composable
-fun HomePage(navController: NavController, viewModel: ProfileViewModel = viewModel()) {
+fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel()) {
     val scrollState = rememberScrollState()
     val date = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale("id")).format(Date())
 
@@ -54,9 +55,8 @@ fun HomePage(navController: NavController, viewModel: ProfileViewModel = viewMod
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Logo Placeholder
                 Image(
-                    painter = painterResource(id = R.drawable.logo), // Replace with your logo resource
+                    painter = painterResource(id = R.drawable.logo),
                     contentDescription = "Logo",
                     modifier = Modifier.size(80.dp)
                 )
@@ -77,12 +77,7 @@ fun HomePage(navController: NavController, viewModel: ProfileViewModel = viewMod
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )
-//            Text(
-//                text = viewModel.name,
-//                color = Color(0xFF388E3C),
-//                fontSize = 24.sp,
-//                fontWeight = FontWeight.Bold
-//            )
+
             Text(
                 text = "Sudah cek tumbuh kembang anak hari ini?",
                 color = Color.DarkGray,
@@ -91,7 +86,7 @@ fun HomePage(navController: NavController, viewModel: ProfileViewModel = viewMod
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Bagian Info
+
             Text(
                 text = "Info",
                 color = Color.Black,
@@ -140,7 +135,6 @@ fun HomePage(navController: NavController, viewModel: ProfileViewModel = viewMod
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            // Bagian Artikel
             Text(
                 text = "Artikel",
                 color = Color.Black,
@@ -176,12 +170,8 @@ fun HomePage(navController: NavController, viewModel: ProfileViewModel = viewMod
         BottomNavigationBar(modifier = Modifier.align(Alignment.BottomCenter), navController)
     }
 }
-//fun extractNameFromEmail(email: String): String {
-//    return email.substringBefore('@').replaceFirstChar { it.uppercase() }
-//}
 
 
-// Bottom Navigation Bar
 @Composable
 fun BottomNavigationBar(modifier: Modifier = Modifier, navController: NavController) {
     BottomNavigation(
@@ -220,6 +210,6 @@ fun BottomNavigationBar(modifier: Modifier = Modifier, navController: NavControl
 @Composable
 fun HomePreview() {
     val navController = rememberNavController()
-    val viewModel = ProfileViewModel()
+    val viewModel = UserViewModel()
     HomePage(navController = navController, viewModel = viewModel)
 }

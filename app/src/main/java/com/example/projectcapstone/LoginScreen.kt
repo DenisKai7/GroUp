@@ -13,7 +13,6 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
@@ -39,7 +38,7 @@ import com.example.projectcapstone.ui.theme.ProjectCapstoneTheme
 import com.example.projectcapstone.ui.theme.UserViewModel
 
 @Composable
-fun LoginScreen(navController: NavController,viewModel: UserViewModel = viewModel(), ViewModel:ProfileViewModel = viewModel()) {
+fun LoginScreen(navController: NavController,viewModel: UserViewModel = viewModel()) {
     var email by remember { mutableStateOf("") }
     var password by remember{ mutableStateOf("") }
     var loginError = remember { mutableStateOf("") }
@@ -88,7 +87,6 @@ fun LoginScreen(navController: NavController,viewModel: UserViewModel = viewMode
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Password kolomnya
             var passwordVisible by remember { mutableStateOf(false) }
             OutlinedTextField(
                 value = password,
@@ -113,15 +111,15 @@ fun LoginScreen(navController: NavController,viewModel: UserViewModel = viewMode
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Login Button
+
             Button(
                 onClick = {
                     isLoading = true
                     viewModel.login(email, password) { success, errorMessage ->
                         isLoading = false
                         if (success) {
-                            ViewModel.email = email
-                            ViewModel.extractNameFromEmail()
+                            viewModel.email = email
+                            viewModel.extractNameFromEmail()
                             navController.navigate("HomePage")
                         } else {
                             Toast.makeText(

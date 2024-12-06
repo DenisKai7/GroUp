@@ -15,6 +15,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.IconButton
@@ -37,24 +39,23 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.projectcapstone.ui.theme.UserViewModel
 
 @Composable
-fun EditScreen(navController: NavController, viewModel: ProfileViewModel) {
-    var profileImageUri by remember { mutableStateOf<Uri?>(viewModel.profileImageUri) }
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { uri: Uri? -> profileImageUri = uri }
-    )
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+fun EditScreen(navController: NavController, viewModel: UserViewModel) {
+
     val context = LocalContext.current
     val scrollState = rememberScrollState()
     var name by remember { mutableStateOf(viewModel.name) }
-    var password by remember { mutableStateOf(viewModel.password) }
     var email by remember { mutableStateOf(viewModel.email) }
+    var password by remember { mutableStateOf("") }
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+
     var passwordError by remember { mutableStateOf<String?>(null) }
     var emailError by remember { mutableStateOf<String?>(null) }
+    var passwordVisible by remember { mutableStateOf(false) }
 
-    val imagePickerLauncher = rememberLauncherForActivityResult(
+    val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri: Uri? -> selectedImageUri = uri }
     )
@@ -62,7 +63,6 @@ fun EditScreen(navController: NavController, viewModel: ProfileViewModel) {
     fun validateForm(): Boolean {
         var isValid = true
 
-        // Validate password
         if (password.length < 8) {
             passwordError = "Password must be at least 8 characters."
             isValid = false
@@ -70,9 +70,9 @@ fun EditScreen(navController: NavController, viewModel: ProfileViewModel) {
             passwordError = null
         }
 
-        // Validate email
+
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailError = "Invalid email format."
+            emailError = "Please enter a valid email address."
             isValid = false
         } else {
             emailError = null
@@ -81,13 +81,14 @@ fun EditScreen(navController: NavController, viewModel: ProfileViewModel) {
         return isValid
     }
 
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
             .verticalScroll(scrollState)
     ) {
-        // Header with back button and logo
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -122,7 +123,7 @@ fun EditScreen(navController: NavController, viewModel: ProfileViewModel) {
                     .fillMaxWidth()
             ) {
                 AsyncImage(
-                    model = profileImageUri ?: ImageRequest.Builder(context)
+                    model = selectedImageUri ?: ImageRequest.Builder(context)
                         .data("https://example.com/profile_image.png")
                         .build(),
                     contentDescription = "Profile Picture",
@@ -153,16 +154,18 @@ fun EditScreen(navController: NavController, viewModel: ProfileViewModel) {
         ) {
             ProfileTextField(label = "Name", value = name, onValueChange = { name = it })
 
-            // Password field with visibility transformation
+
             ProfileTextField(
                 label = "Password",
                 value = password,
                 onValueChange = { password = it },
-                visualTransformation = PasswordVisualTransformation(),
-                errorMessage = passwordError
+                errorMessage = passwordError,
+                passwordVisible = passwordVisible,
+                onTogglePasswordVisibility = { passwordVisible = !passwordVisible },
+                isPasswordField = true
             )
 
-            // Email field with error handling
+
             ProfileTextField(
                 label = "E-mail",
                 value = email,
@@ -171,11 +174,10 @@ fun EditScreen(navController: NavController, viewModel: ProfileViewModel) {
             )
         }
 
-        // Save Button
         Button(
             onClick = {
                 if (validateForm()) {
-                    viewModel.saveProfile(name, password, email)
+                    viewModel.updateProfile(name, email, selectedImageUri)
                     navController.navigate("ProfileScreen")
                 }
             },
@@ -186,6 +188,7 @@ fun EditScreen(navController: NavController, viewModel: ProfileViewModel) {
         ) {
             Text(text = "Save", color = Color.White)
         }
+
         BottomNavigationBar(navController = navController)
     }
 }
@@ -195,7 +198,9 @@ fun ProfileTextField(
     label: String,
     value: String,
     onValueChange: (String) -> Unit,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
+    isPasswordField: Boolean = false,
+    onTogglePasswordVisibility: (() -> Unit)? = null,
+    passwordVisible: Boolean = false,
     errorMessage: String? = null
 ) {
     Column(modifier = Modifier.padding(vertical = 8.dp)) {
@@ -203,7 +208,17 @@ fun ProfileTextField(
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
-            visualTransformation = visualTransformation,
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                if (isPasswordField) {
+                    IconButton(onClick = { onTogglePasswordVisibility?.invoke() }) {
+                        Icon(
+                            imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                            contentDescription = if (passwordVisible) "Hide password" else "Show password"
+                        )
+                    }
+                }
+            },
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 textColor = Color.Black,
                 backgroundColor = Color.White,
@@ -218,10 +233,12 @@ fun ProfileTextField(
     }
 }
 
+
+
 @Preview(showBackground = true)
 @Composable
 fun EditPreview() {
-    val mockViewModel = ProfileViewModel().apply {
+    val mockViewModel = UserViewModel().apply {
         name = "John Doe"
         email = "john.doe@example.com"
     }
