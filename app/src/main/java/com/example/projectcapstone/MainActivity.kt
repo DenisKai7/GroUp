@@ -25,11 +25,10 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             var isDarkTheme by remember { mutableStateOf(false) }
+            var language by remember { mutableStateOf("English") }
 
             ProjectCapstoneTheme(darkTheme = isDarkTheme) {
                 val navController = rememberNavController()
-
-
                 val profileViewModel = remember { UserViewModel() }
 
                 Surface(color = MaterialTheme.colorScheme.background) {
@@ -44,26 +43,32 @@ class MainActivity : ComponentActivity() {
                             LoginScreen(navController = navController)
                         }
                         composable(Routes.HomePage) {
-                            HomePage(navController)
+                            HomePage(
+                                navController = navController,
+                                language = language
+                            )
                         }
                         composable(Routes.RegisterScreen) {
-                            RegisterScreen(navController)
+                            RegisterScreen(navController = navController)
                         }
                         composable(Routes.StatusCheckScreen) {
-                            StatusCheckScreen(navController)
+                            StatusCheckScreen(navController = navController)
                         }
                         composable(Routes.ProfileScreen) {
                             ProfileScreen(
                                 navController = navController,
                                 isDarkTheme = isDarkTheme,
                                 onThemeChange = { isDarkTheme = !isDarkTheme },
+                                language = language,
+                                onLanguageChange = { language = it },
                                 viewModel = profileViewModel
                             )
                         }
                         composable(Routes.EditScreen) {
                             EditScreen(
                                 navController = navController,
-                                viewModel = profileViewModel
+                                viewModel = profileViewModel,
+                                language = language
                             )
                         }
                     }
@@ -72,3 +77,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+

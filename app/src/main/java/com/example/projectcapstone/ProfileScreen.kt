@@ -34,12 +34,13 @@ fun ProfileScreen(
     navController: NavController,
     isDarkTheme: Boolean,
     onThemeChange: (Boolean) -> Unit,
-    viewModel: UserViewModel
+    viewModel: UserViewModel,
+    language: String,
+    onLanguageChange: (String) -> Unit
 ) {
     val name by remember { mutableStateOf(viewModel.name) }
     val email by remember { mutableStateOf(viewModel.email) }
     val profileImageUri by remember { mutableStateOf(viewModel.profileImageUri) }
-
 
     // UI untuk ProfileScreen
     Column(
@@ -47,6 +48,7 @@ fun ProfileScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
+
         // Back Button
         IconButton(
             onClick = { navController.popBackStack() },
@@ -100,7 +102,8 @@ fun ProfileScreen(
             ProfileOption(icon = Icons.Default.Info, label = "About us", onClick = {})
             ProfileOption(icon = Icons.Default.Help, label = "Help", onClick = {})
             ProfileOption(icon = Icons.Default.Settings, label = "Edit Profile", onClick = {navController.navigate(Routes.EditScreen)})
-            LanguageOption()
+            LanguageToggle( isBahasa = language == "Bahasa",  // Pass the correct value for isBahasa
+                onLanguageChange = onLanguageChange)
 
             // Switch untuk Dark Mode
             ThemeOption(isDarkTheme = isDarkTheme, onThemeChange = onThemeChange)
@@ -139,7 +142,7 @@ fun ProfileOption(icon: ImageVector, label: String, labelColor: Color = Material
 }
 
 @Composable
-fun LanguageOption() {
+fun LanguageToggle(isBahasa: Boolean, onLanguageChange: (String) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -153,14 +156,19 @@ fun LanguageOption() {
             modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
-        Text(text = "Bahasa", fontSize = 16.sp, color = MaterialTheme.colorScheme.onBackground)
+        Text(
+            text = if (isBahasa) "Bahasa Indonesia" else "English",
+            fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Spacer(modifier = Modifier.weight(1f))
         Switch(
-            checked = false,
-            onCheckedChange = { /* Handle language toggle */ }
+            checked = isBahasa,
+            onCheckedChange = { isChecked ->
+                onLanguageChange(if (isChecked) "Bahasa" else "English")
+            }
         )
     }
-    Divider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), thickness = 1.dp)
 }
 
 @Composable
@@ -192,15 +200,16 @@ fun ThemeOption(isDarkTheme: Boolean, onThemeChange: (Boolean) -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun ProfilePreview() {
-//    val mockViewModel = UserViewModel().apply {
-//        nameState.value = "John Doe"
-//        email = "john.doe@example.com"
-//    }
-//
-//    ProfileScreen(
-//        navController = rememberNavController(),
-//        isDarkTheme = false,
-//        onThemeChange = {},
-//        viewModel = mockViewModel
-//    )
+    val mockViewModel = UserViewModel().apply {
+        email = "john.doe@example.com"
+    }
+    val language = "English"
+    ProfileScreen(
+        navController = rememberNavController(),
+        isDarkTheme = false,
+        onThemeChange = {},
+        viewModel = mockViewModel,
+        language = language,
+        onLanguageChange = {} // Provide a default empty lambda here
+    )
 }
