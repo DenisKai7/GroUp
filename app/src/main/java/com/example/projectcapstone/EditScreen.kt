@@ -40,9 +40,10 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.projectcapstone.ui.theme.UserViewModel
+import org.intellij.lang.annotations.Language
 
 @Composable
-fun EditScreen(navController: NavController, viewModel: UserViewModel) {
+fun EditScreen(navController: NavController, viewModel: UserViewModel,language: String) {
 
     val context = LocalContext.current
     val scrollState = rememberScrollState()
@@ -85,7 +86,6 @@ fun EditScreen(navController: NavController, viewModel: UserViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
             .verticalScroll(scrollState)
     ) {
 
@@ -242,9 +242,10 @@ fun EditPreview() {
         name = "John Doe"
         email = "john.doe@example.com"
     }
-
+    val language = "English"
     EditScreen(
         navController = rememberNavController(),
-        viewModel = mockViewModel
+        viewModel = mockViewModel,
+        language = language
     )
 }

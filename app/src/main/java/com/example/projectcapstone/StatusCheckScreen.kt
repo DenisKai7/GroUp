@@ -16,6 +16,10 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,7 +39,7 @@ fun StatusCheckScreen(navController: NavController,) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F0FF))
+
     ) {
         Column(
             modifier = Modifier
@@ -58,7 +62,7 @@ fun StatusCheckScreen(navController: NavController,) {
                     text = "Status Check",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF000000)
+                    color = Color(0xFF888282)
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -93,6 +97,13 @@ fun LogoSection() {
 
 @Composable
 fun DataAnakCard() {
+    var namaAnak by remember { mutableStateOf("") }
+    var usiaAnak by remember { mutableStateOf("") }
+    var tinggiBadanAnak by remember { mutableStateOf("") }
+    var beratBadanAnak by remember { mutableStateOf("") }
+    var jenisKelaminAnak by remember { mutableStateOf("") }
+    var statusAnak by remember { mutableStateOf("") }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,10 +111,7 @@ fun DataAnakCard() {
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF00B8D4))
     ) {
-
-        Column(modifier = Modifier
-            .padding(16.dp)
-        ) {
+        Column(modifier = Modifier.padding(16.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -114,40 +122,84 @@ fun DataAnakCard() {
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
-                Text(
-                    text = "+ Isi data",
-                    fontSize = 14.sp,
-                    color = Color.White
-                )
             }
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Input fields
+            OutlinedTextField(
+                value = namaAnak,
+                onValueChange = { namaAnak = it },
+                label = { Text("Nama Anak") },
+                modifier = Modifier.fillMaxWidth()
+            )
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Fields
-            listOf(
-                "Nama Anak",
-                "Usia Anak",
-                "Tinggi Badan Anak",
-                "Berat Badan Anak",
-                "Jenis Kelamin Anak",
-                "Status Anak"
-            ).forEach { field ->
+            OutlinedTextField(
+                value = usiaAnak,
+                onValueChange = { usiaAnak = it },
+                label = { Text("Usia Anak") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = tinggiBadanAnak,
+                onValueChange = { tinggiBadanAnak = it },
+                label = { Text("Tinggi Badan Anak (cm)") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = beratBadanAnak,
+                onValueChange = { beratBadanAnak = it },
+                label = { Text("Berat Badan Anak (kg)") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = jenisKelaminAnak,
+                onValueChange = { jenisKelaminAnak = it },
+                label = { Text("Jenis Kelamin Anak") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = statusAnak,
+                onValueChange = { statusAnak = it },
+                label = { Text("Status Anak") },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Button to submit data
+            Button(
+                onClick = {
+                    // Implementasi aksi kirim data
+                    println("Data Anak:")
+                    println("Nama: $namaAnak")
+                    println("Usia: $usiaAnak")
+                    println("Tinggi: $tinggiBadanAnak cm")
+                    println("Berat: $beratBadanAnak kg")
+                    println("Jenis Kelamin: $jenisKelaminAnak")
+                    println("Status: $statusAnak")
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+            ) {
                 Text(
-                    text = field,
-                    color = Color.White,
-                    fontSize = 14.sp
+                    text = "Kirim Data",
+                    color = Color(0xFF00B8D4),
+                    fontWeight = FontWeight.Bold
                 )
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(Color.White)
-                )
-                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
 }
+
 
 @Composable
 fun GridCards() {
@@ -217,8 +269,8 @@ fun BottomNavigationBars(modifier: Modifier = Modifier, navController: NavContro
             onClick = { navController.navigate(Routes.HomePage) }
         )
         BottomNavigationItem(
-            icon = { Icon(Icons.Filled.Article, contentDescription = "Articles") },
-            label = { Text("Articles") },
+            icon = { Icon(Icons.Filled.Article, contentDescription = " Check") },
+            label = { Text(" Check") },
             selected = false,
             onClick = { navController.navigate(Routes.StatusCheckScreen) }
         )

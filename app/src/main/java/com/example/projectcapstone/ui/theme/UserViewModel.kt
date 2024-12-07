@@ -1,6 +1,8 @@
 package com.example.projectcapstone.ui.theme
 
+import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.util.Patterns
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -15,12 +17,23 @@ import kotlinx.coroutines.launch
 import com.example.projectcapstone.data.api.Result
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import com.dicoding.picodiploma.loginwithanimation.data.pref.dataStore
+import com.example.projectcapstone.data.api.ApiClient
+import com.example.projectcapstone.data.api.Article
 import com.example.projectcapstone.data.api.GetUserResponse
 import com.example.projectcapstone.data.api.UpdateUserRequest
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 
 class UserViewModel : ViewModel() {
+
+
+    private val _articles = MutableStateFlow<List<Article>>(emptyList())
+    val articles: StateFlow<List<Article>> = _articles
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -178,6 +191,16 @@ class UserViewModel : ViewModel() {
             }
         }
     }
+    fun fetchArticles() {
+        viewModelScope.launch {
+            try {
+                val response = ApiClient.service.getArticles()
+                _articles.value = response.data
+            } catch (e: Exception) {
+                Log.e("UserViewModel", "Error fetching articles: ${e.message}", e)
+            }
+        }
+    }
 
 
     data class ErrorResponse(
@@ -204,14 +227,19 @@ class UserViewModel : ViewModel() {
             "Guest"
         }
     }
-//    fun validateForm(name: String, email: String, password: String): Pair<Boolean, String?> {
-//        return when {
-//            name.isBlank() -> false to "Name cannot be empty."
-//            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> false to "Invalid email format."
-//            password.length < 8 -> false to "Password must be at least 8 characters."
-//            else -> true to null
-//        }
-//    }
+    val languagePreferenceKey = stringPreferencesKey("language")
+
+    suspend fun saveLanguage(language: String, context: Context) {
+        context.dataStore.edit { preferences ->
+            preferences[languagePreferenceKey] = language
+        }
+    }
+
+    fun getLanguage(context: Context): Flow<String?> {
+        return context.dataStore.data.map { preferences ->
+            preferences[languagePreferenceKey]
+        }
+    }
 
 
 }

@@ -64,3 +64,5 @@ data class LogoutResponse(
     val data: String? = null,
     val errors: String? = null
 )
+
+
