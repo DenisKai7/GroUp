@@ -46,7 +46,6 @@ import com.example.projectcapstone.data.api.Result
 fun RegisterScreen(
     navController: NavController,
     viewModel: UserViewModel = viewModel(),
-    ViewModel:ProfileViewModel = viewModel()
 ) {
     val isloading by viewModel.isLoading.collectAsState()
     val registerResult by viewModel.registerResult.
@@ -157,8 +156,8 @@ fun RegisterScreen(
                 onClick = {
                     viewModel.register(email, password, fullName){ success,errorMessage ->
                         if(success){
-                            ViewModel.email = email
-                            ViewModel.extractNameFromEmail()
+                            viewModel.email = email
+                            viewModel.extractNameFromEmail()
                             navController.navigate("loginScreen")
                         }else{
                             Toast.makeText(
@@ -178,11 +177,7 @@ fun RegisterScreen(
             ) {
                 Text(text = "Daftar Diri", color = Color.White, fontSize = 16.sp)
             }
-            if (isloading){
-                    CircularProgressIndicator(color = Color.Black, modifier = Modifier.size(20.dp))
-            }else{
-                Text(text = "masuk", color = Color.White, fontSize = 16.sp)
-            }
+
 
             when (registerResult) {
                 is Result.Loading -> CircularProgressIndicator()
@@ -197,6 +192,8 @@ fun RegisterScreen(
                     color = Color.Red,
                     fontWeight = FontWeight.Bold
                 )
+
+                else -> {}
             }
         }
     }
@@ -237,7 +234,7 @@ fun BelakangShapes() {
             lineTo(width, height * 0.5f)
             close()
         }
-        drawPath(path = greenPath, color = Color(0xFF66BB6A)) // Adjust the green shade if needed
+        drawPath(path = greenPath, color = Color(0xFF66BB6A))
     }
 }
 
