@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { db } from '../application/firestore.js';
+import moment from 'moment-timezone';
 
 const articlesCollection = db.collection('articles');
 
@@ -41,7 +42,7 @@ const scrapeWebsite = async (website) => {
           title,
           urlImage,
           urlWeb,
-          scrapedAt: new Date().toISOString()
+          scrapedAt: moment().tz('Asia/Jakarta').format()
         });
       }
     });

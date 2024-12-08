@@ -2,12 +2,14 @@ import { web } from './application/web.js';
 import scrapper from "./service/scraper_service.js";
 import schedule from 'node-schedule';
 import { website } from './web/web_config.js';
+import moment from 'moment-timezone';
 
 let result = {};
 
-schedule.scheduleJob('0 0 * * *', async () => {
-result = await scrapper.scrapeWebsite(website);
-}); 
+schedule.scheduleJob({ hour: 0, minute: 0, tz: 'Asia/Jakarta' }, async () => {
+  console.log(`Scheduled job running at: ${moment().tz('Asia/Jakarta').format()}`);
+  result = await scrapper.scrapeWebsite(website);
+});
 
 result = await scrapper.scrapeWebsite(website);
 console.log(result)
