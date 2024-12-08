@@ -95,7 +95,7 @@ fun ProfileScreen(
                 .padding(16.dp)
                 .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp))
         ) {
-            ProfileOption(icon = Icons.Default.Info, label = "About us", onClick = {navController.navigate(Routes.AboutUsScreen)})
+            ProfileOption(icon = Icons.Default.Info, label = "About us", onClick = {navController.navigate()})
             ProfileOption(icon = Icons.Default.Help, label = "Help", onClick = {})
             ProfileOption(icon = Icons.Default.Settings, label = "Edit Profile", onClick = {navController.navigate(Routes.EditScreen)})
             LanguageOption()

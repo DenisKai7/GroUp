@@ -62,6 +62,10 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.EditScreen) {
                             EditScreen(navController = navController, viewModel = profileViewModel)
                         }
+                        composable(Routes.AboutUsScreen) {
+                            AboutUsScreen(navController = navController)
+                        }
+
                     }
 
                 }
