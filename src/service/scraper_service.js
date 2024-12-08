@@ -36,7 +36,7 @@ const scrapeWebsite = async (website) => {
       const urlImage = $(element).find('span.ratiobox_content').children("img").attr('data-src') || 'kosong';
       const urlWeb = $(element).find('a').attr('href') || 'kosong';
 
-      if (title.toLowerCase().includes('stunting')) {
+      if (urlImage !== 'kosong' && title.toLowerCase().includes('stunting')) {
         articles.push({
           title,
           urlImage,
