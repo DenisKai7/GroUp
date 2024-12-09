@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(navController: NavController) {
     val scale = remember { Animatable(0f) }
+    val context = LocalContext.current
+    val isLoggedIn =SessionManager.getIsLogin(context)
 
     LaunchedEffect(key1 = true) {
         scale.animateTo(
@@ -36,8 +39,14 @@ fun SplashScreen(navController: NavController) {
         )
         // Tunggu 3 detik sebelum berpindah layar
         delay(3000L)
-        navController.navigate("LoginScreen") {
-            popUpTo("SplashScreen") { inclusive = true }
+        if (isLoggedIn) {
+            navController.navigate("HomePage") {
+                popUpTo("LoginScreen") { inclusive = true } // Remove LoginScreen from backstack
+            }
+        }else {
+            navController.navigate("LoginScreen") {
+                popUpTo("SplashScreen") { inclusive = true }
+            }
         }
     }
 

@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.projectcapstone.SessionManager.KEY_EMAIL
 import com.example.projectcapstone.ui.theme.UserViewModel
 
 @Composable
@@ -38,17 +39,15 @@ fun ProfileScreen(
     language: String,
     onLanguageChange: (String) -> Unit
 ) {
-    val name by remember { mutableStateOf(viewModel.name) }
-    val email by remember { mutableStateOf(viewModel.email) }
-    val profileImageUri by remember { mutableStateOf(viewModel.profileImageUri) }
 
+    val context = LocalContext.current
+    val (name, email, profileImageUri) = SessionManager.getUserData(context)
     // UI untuk ProfileScreen
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-
         // Back Button
         IconButton(
             onClick = { navController.popBackStack() },
@@ -77,18 +76,8 @@ fun ProfileScreen(
                     .background(Color.Gray),
                 contentScale = ContentScale.Crop
             )
-            Text(
-                text = name,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-            Text(
-                text = email,
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-            )
+            Text(text = name ?: "No Name", style = MaterialTheme.typography.bodyLarge)
+            Text(text = email ?: "No Email", style = MaterialTheme.typography.bodyLarge)
         }
 
         // Options Section
@@ -102,8 +91,7 @@ fun ProfileScreen(
             ProfileOption(icon = Icons.Default.Info, label = "About us", onClick = {})
             ProfileOption(icon = Icons.Default.Help, label = "Help", onClick = {})
             ProfileOption(icon = Icons.Default.Settings, label = "Edit Profile", onClick = {navController.navigate(Routes.EditScreen)})
-            LanguageToggle( isBahasa = language == "Bahasa",  // Pass the correct value for isBahasa
-                onLanguageChange = onLanguageChange)
+            LanguageToggle(isBahasa = language == "Bahasa", onLanguageChange = onLanguageChange)
 
             // Switch untuk Dark Mode
             ThemeOption(isDarkTheme = isDarkTheme, onThemeChange = onThemeChange)
@@ -112,11 +100,17 @@ fun ProfileScreen(
                 icon = Icons.Default.ExitToApp,
                 label = "Logout",
                 labelColor = Color.Red,
-                onClick = { navController.navigate(Routes.LoginScreen) }
+                onClick = {
+                    SessionManager.clearData(context) // Hapus semua data pengguna
+                    navController.navigate(Routes.LoginScreen) {
+                        popUpTo(Routes.ProfileScreen) { inclusive = true } // Hapus semua layar sebelumnya
+                    }
+                }
             )
         }
     }
 }
+
 
 
 
@@ -196,20 +190,21 @@ fun ThemeOption(isDarkTheme: Boolean, onThemeChange: (Boolean) -> Unit) {
     Divider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), thickness = 1.dp)
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun ProfilePreview() {
-    val mockViewModel = UserViewModel().apply {
-        email = "john.doe@example.com"
-    }
-    val language = "English"
-    ProfileScreen(
-        navController = rememberNavController(),
-        isDarkTheme = false,
-        onThemeChange = {},
-        viewModel = mockViewModel,
-        language = language,
-        onLanguageChange = {} // Provide a default empty lambda here
-    )
-}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun ProfilePreview() {
+//    val mockViewModel = UserViewModel().apply {
+//        name = "mohamad farhat"
+//        email = "john.doe@example.com"
+//    }
+//    val language = "English"
+//    ProfileScreen(
+//        navController = rememberNavController(),
+//        isDarkTheme = false,
+//        onThemeChange = {},
+//        viewModel = mockViewModel,
+//        language = language,
+//        onLanguageChange = {} // Provide a default empty lambda here
+//    )
+//}
