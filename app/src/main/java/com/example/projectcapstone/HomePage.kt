@@ -46,10 +46,12 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
     val articles = viewModel.articles.collectAsState(initial = emptyList())
     val date = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale("id")).format(Date())
     val isLoading = viewModel.isLoading.collectAsState(initial = false)
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.fetchArticles()
     }
-
+    val email = SessionManager.getEmail(context)
+    val name = extractNameFromEmail(email)
 
     Box(
         modifier = Modifier
@@ -99,7 +101,7 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
 
 
                 Text(
-                    text = "$welcomeText, ${viewModel.extractNameFromEmail()}",
+                    text = "$welcomeText, $name",
                     color = Color(0xFF388E3C),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
@@ -179,6 +181,10 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
         }
     }
 }
+fun extractNameFromEmail(email: String): String {
+    return email.substringBefore("@")
+}
+
 
 @Composable
 fun ArticleItem(article: Article) {

@@ -31,11 +31,16 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.dicoding.picodiploma.loginwithanimation.data.pref.dataStore
 import com.example.projectcapstone.ui.theme.ProjectCapstoneTheme
 import com.example.projectcapstone.ui.theme.UserViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(navController: NavController,viewModel: UserViewModel = viewModel()) {
@@ -118,8 +123,9 @@ fun LoginScreen(navController: NavController,viewModel: UserViewModel = viewMode
                     viewModel.login(email, password) { success, errorMessage ->
                         isLoading = false
                         if (success) {
-                            viewModel.email = email
-                            viewModel.extractNameFromEmail()
+                            viewModel.getLoginData { token, isLoggedIn ->
+                                SessionManager.setUserData(context, token, email) // Simpan token dan email
+                            }
                             navController.navigate("HomePage")
                         } else {
                             Toast.makeText(
@@ -127,8 +133,6 @@ fun LoginScreen(navController: NavController,viewModel: UserViewModel = viewMode
                                 errorMessage ?: "Login gagal",
                                 Toast.LENGTH_LONG
                             ).show()
-
-
                         }
                     }
                 },
@@ -141,6 +145,8 @@ fun LoginScreen(navController: NavController,viewModel: UserViewModel = viewMode
                     Text(text = "Masuk", color = Color.White, fontSize = 16.sp)
                 }
             }
+
+
 
             if (loginError.value.isNotEmpty()){
                 Text(text = loginError.value, color = Color.Red, modifier = Modifier.padding(top = 8.dp))

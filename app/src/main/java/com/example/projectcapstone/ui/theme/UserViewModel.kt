@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import com.example.projectcapstone.data.api.Result
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.dicoding.picodiploma.loginwithanimation.data.pref.dataStore
@@ -46,11 +47,20 @@ class UserViewModel : ViewModel() {
 
     var profileImageUri by mutableStateOf<Uri?>(null)
 
-    fun updateProfile(newName: String, newEmail: String, newProfileImageUri: Uri?) {
-        name = newName
-        email = newEmail
-        profileImageUri = newProfileImageUri
+    fun saveUserData(inputEmail: String, inputName: String, inputPassword: String) {
+        email = inputEmail
+        name = inputName
+        password = inputPassword
     }
+
+
+
+
+    // Save access token and login status
+    fun getLoginData(callback:(token: String, isLoggedIn: Boolean) ->Unit) {
+        callback(accessToken, isLogin)
+    }
+
     fun register(email: String, password: String, name: String, callback: (Boolean, String?) -> Unit) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -90,6 +100,8 @@ class UserViewModel : ViewModel() {
                 val response = ApiConfig.getApiService().login(LoginRequest(email, password))
                 if (response.isSuccessful) {
                     response.body()?.data?.let { loginData ->
+                        accessToken =loginData.accessToken
+                        isLogin =true
                         updateEmail(email)
                         callback(true, null)
                     } ?: run {
@@ -130,51 +142,7 @@ class UserViewModel : ViewModel() {
             }
         }
     }
-    fun getUser(token: String, callback: (Boolean, String?, GetUserResponse?) -> Unit) {
-        viewModelScope.launch {
-            _isLoading.value = true
-            try {
-                val response = ApiConfig.getApiService().getUser(
-                    token = "Bearer $token"
-                )
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        callback(true, null, it)
-                    } ?: run {
-                        callback(false, "Unknown error occurred", null)
-                    }
-                } else {
-                    val errorBody = response.errorBody()?.string() ?: "Unknown error"
-                    callback(false, parseError(errorBody), null)
-                }
-            } catch (e: Exception) {
-                callback(false, "Network error: ${e.message}", null)
-            } finally {
-                _isLoading.value = false
-            }
-        }
-    }
 
-    fun logout(token: String, callback: (Boolean, String?) -> Unit) {
-        viewModelScope.launch {
-            _isLoading.value = true
-            try {
-                val response = ApiConfig.getApiService().logout(
-                    token = "Bearer $token"
-                )
-                if (response.isSuccessful) {
-                    callback(true, "Logout successful")
-                } else {
-                    val errorBody = response.errorBody()?.string() ?: "Unknown error"
-                    callback(false, parseError(errorBody))
-                }
-            } catch (e: Exception) {
-                callback(false, "Network error: ${e.message}")
-            } finally {
-                _isLoading.value = false
-            }
-        }
-    }
 
     private fun parseError(errorBody: String): String {
         return try {
@@ -186,7 +154,6 @@ class UserViewModel : ViewModel() {
                 // Contoh parsing manual untuk error tertentu
                 "Email atau password tidak valid"
             } else {
-                // Gunakan error mentah jika semua parsing gagal
                 errorBody
             }
         }
@@ -212,6 +179,8 @@ class UserViewModel : ViewModel() {
     var email by mutableStateOf("")
     var name by mutableStateOf("")
     var password by mutableStateOf("")
+    var accessToken by mutableStateOf("")
+    var isLogin by mutableStateOf(true)
 
 
     fun updateEmail(newEmail: String) {
@@ -220,26 +189,6 @@ class UserViewModel : ViewModel() {
     }
 
 
-    fun extractNameFromEmail(): String {
-        return if (email.contains("@")) {
-            email.substringBefore("@").replaceFirstChar { it.uppercaseChar() }
-        } else {
-            "Guest"
-        }
-    }
-    val languagePreferenceKey = stringPreferencesKey("language")
-
-    suspend fun saveLanguage(language: String, context: Context) {
-        context.dataStore.edit { preferences ->
-            preferences[languagePreferenceKey] = language
-        }
-    }
-
-    fun getLanguage(context: Context): Flow<String?> {
-        return context.dataStore.data.map { preferences ->
-            preferences[languagePreferenceKey]
-        }
-    }
 
 
 }
