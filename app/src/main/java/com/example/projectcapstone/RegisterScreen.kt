@@ -155,7 +155,8 @@ fun RegisterScreen(
                 onClick = {
                     viewModel.register(email, password, Name) { success, errorMessage ->
                         if (success) {
-                            viewModel.saveUserData(email, Name, password)
+                            // Simpan data user di SharedPreferences
+                            SessionManager.saveUserData(context, Name, email, null)
                             navController.navigate("loginScreen")
                         } else {
                             Toast.makeText(
@@ -173,6 +174,7 @@ fun RegisterScreen(
             ) {
                 Text(text = "Daftar Diri", color = Color.White, fontSize = 16.sp)
             }
+
 
             when (registerResult) {
                 is Result.Loading -> CircularProgressIndicator()

@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
@@ -190,21 +191,20 @@ fun ThemeOption(isDarkTheme: Boolean, onThemeChange: (Boolean) -> Unit) {
     Divider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), thickness = 1.dp)
 }
 
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun ProfilePreview() {
-//    val mockViewModel = UserViewModel().apply {
-//        name = "mohamad farhat"
-//        email = "john.doe@example.com"
-//    }
-//    val language = "English"
-//    ProfileScreen(
-//        navController = rememberNavController(),
-//        isDarkTheme = false,
-//        onThemeChange = {},
-//        viewModel = mockViewModel,
-//        language = language,
-//        onLanguageChange = {} // Provide a default empty lambda here
-//    )
-//}
+@Preview(showBackground = true)
+@Composable
+fun ProfilePreview() {
+    val mockContext = LocalContext.current
+    val mockData = Triple("John Doe", "johndoe@example.com", null)
+    SessionManager.saveUserData(mockContext, mockData.first, mockData.second)
+
+    ProfileScreen(
+        navController = rememberNavController(),
+        isDarkTheme = false,
+        onThemeChange = {},
+        viewModel = viewModel(),
+        language = "English",
+        onLanguageChange = {}
+    )
+}
+

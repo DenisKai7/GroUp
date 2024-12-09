@@ -37,25 +37,24 @@ object SessionManager {
     fun getAccessToken(context: Context): String {
         return getSharedPreference(context).getString(KEY_TOKEN, "")?:""
     }
-    fun saveUserData(context: Context, name: String, email: String, profileImageUri: String?) {
-        val sharedPreferences = context.getSharedPreferences("capstone", Context.MODE_PRIVATE)
-        with(sharedPreferences.edit()) {
-            putString(NAME_KEY, name)
-            putString(KEY_EMAIL, email)
-            putString(PROFILE_IMAGE_KEY, profileImageUri)
-            apply()
-        }
-    }
-
 
     fun getUserData(context: Context): Triple<String?, String?, String?> {
         val sharedPreferences = context.getSharedPreferences("capstone", Context.MODE_PRIVATE)
         val name = sharedPreferences.getString(NAME_KEY, null)
         val email = sharedPreferences.getString(KEY_EMAIL, null)
-        val profileImageUri = sharedPreferences.getString(PROFILE_IMAGE_KEY, null)
-        return Triple(name, email, profileImageUri)
+        val profileImage = sharedPreferences.getString(PROFILE_IMAGE_KEY, null)
+        return Triple(name, email, profileImage)
     }
 
+    fun saveUserData(context: Context, name: String, email: String, profileImage: String? = null) {
+        val sharedPreferences = context.getSharedPreferences("capstone", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            putString(NAME_KEY, name)
+            putString(KEY_EMAIL, email)
+            profileImage?.let { putString(PROFILE_IMAGE_KEY, it) }
+            apply()
+        }
+    }
 
 
     fun getIsLogin(context: Context): Boolean {
@@ -63,8 +62,10 @@ object SessionManager {
     }
 
     fun clearData(context: Context) {
-        getSharedPreference(context).edit().clear().apply()
-        context.getSharedPreferences("capstone", Context.MODE_PRIVATE)
-            .edit().clear().apply()
+        val sharedPreferences = context.getSharedPreferences("capstone", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            clear()
+            apply()
+        }
     }
 }
