@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.projectcapstone.SessionManager.KEY_EMAIL
 import com.example.projectcapstone.ui.theme.UserViewModel
 
 @Composable
@@ -38,12 +39,9 @@ fun ProfileScreen(
     language: String,
     onLanguageChange: (String) -> Unit
 ) {
-    val name = viewModel.name
-    val email = viewModel.email
-    val profileImageUri = viewModel.profileImageUri
 
     val context = LocalContext.current
-
+    val (name, email, profileImageUri) = SessionManager.getUserData(context)
     // UI untuk ProfileScreen
     Column(
         modifier = Modifier
@@ -78,8 +76,8 @@ fun ProfileScreen(
                     .background(Color.Gray),
                 contentScale = ContentScale.Crop
             )
-            Text(text = "$name", style = MaterialTheme.typography.bodyLarge)
-            Text(text = " $email", style = MaterialTheme.typography.bodyLarge)
+            Text(text = name ?: "No Name", style = MaterialTheme.typography.bodyLarge)
+            Text(text = email ?: "No Email", style = MaterialTheme.typography.bodyLarge)
         }
 
         // Options Section
@@ -103,8 +101,10 @@ fun ProfileScreen(
                 label = "Logout",
                 labelColor = Color.Red,
                 onClick = {
-                    SessionManager.clearData(context)
-                    navController.navigate(Routes.LoginScreen)
+                    SessionManager.clearData(context) // Hapus semua data pengguna
+                    navController.navigate(Routes.LoginScreen) {
+                        popUpTo(Routes.ProfileScreen) { inclusive = true } // Hapus semua layar sebelumnya
+                    }
                 }
             )
         }

@@ -60,6 +60,10 @@
             contract = ActivityResultContracts.GetContent(),
             onResult = { uri: Uri? -> selectedImageUri = uri }
         )
+        val currentName by viewModel.userName.collectAsState()
+        val currentEmail by viewModel.userEmail.collectAsState()
+
+
         fun validatePassword(): Boolean {
             return if (password.length >= 8) {
                 passwordError = null
@@ -198,10 +202,12 @@
                     onClick = {
                         if (validateForm()) {
                             val token = SessionManager.getAccessToken(context)
-                            // val token = "token"
                             viewModel.updateUser(token, name) { success, message ->
                                 if (success) {
+                                    // Simpan data ke SessionManager
+                                    SessionManager.saveUserData(context, name, email, selectedImageUri?.toString())
                                     println("Update successful: $message")
+                                    navController.navigate(Routes.ProfileScreen) // Navigasi ke ProfileScreen
                                 } else {
                                     println("Update failed: $message")
                                 }
@@ -213,6 +219,8 @@
                 ) {
                     Text("Update Profile")
                 }
+
+
             }
         }
     }

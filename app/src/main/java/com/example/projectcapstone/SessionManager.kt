@@ -8,6 +8,8 @@ object SessionManager {
     const val KEY_LOGIN: String = "login"
     const val KEY_TOKEN: String = "token"
     const val KEY_EMAIL: String = "email"
+    private const val NAME_KEY = "NAME_KEY"
+    private const val PROFILE_IMAGE_KEY = "PROFILE_IMAGE_KEY"
 
     fun getSharedPreference(context: Context): SharedPreferences {
         return context.getSharedPreferences(
@@ -18,7 +20,8 @@ object SessionManager {
     fun setUserData(
         context: Context,
         accessToken: String?,
-        email: String?
+        email: String?,
+
     ) {
         val editor = getSharedPreference(context).edit()
         editor.putBoolean(KEY_LOGIN, true)
@@ -30,8 +33,27 @@ object SessionManager {
         return getSharedPreference(context).getString(KEY_EMAIL, "") ?: ""
     }
 
+
     fun getAccessToken(context: Context): String {
         return getSharedPreference(context).getString(KEY_TOKEN, "")?:""
+    }
+    fun saveUserData(context: Context, name: String, email: String, profileImageUri: String?) {
+        val sharedPreferences = context.getSharedPreferences("capstone", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            putString(NAME_KEY, name)
+            putString(KEY_EMAIL, email)
+            putString(PROFILE_IMAGE_KEY, profileImageUri)
+            apply()
+        }
+    }
+
+
+    fun getUserData(context: Context): Triple<String?, String?, String?> {
+        val sharedPreferences = context.getSharedPreferences("capstone", Context.MODE_PRIVATE)
+        val name = sharedPreferences.getString(NAME_KEY, null)
+        val email = sharedPreferences.getString(KEY_EMAIL, null)
+        val profileImageUri = sharedPreferences.getString(PROFILE_IMAGE_KEY, null)
+        return Triple(name, email, profileImageUri)
     }
 
 
@@ -42,5 +64,7 @@ object SessionManager {
 
     fun clearData(context: Context) {
         getSharedPreference(context).edit().clear().apply()
+        context.getSharedPreferences("capstone", Context.MODE_PRIVATE)
+            .edit().clear().apply()
     }
 }

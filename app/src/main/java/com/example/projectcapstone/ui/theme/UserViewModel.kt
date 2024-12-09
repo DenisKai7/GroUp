@@ -32,6 +32,11 @@ import kotlinx.coroutines.flow.map
 
 class UserViewModel : ViewModel() {
 
+    private val _userName = MutableStateFlow("Initial Name")
+    val userName: StateFlow<String> = _userName
+
+    private val _userEmail = MutableStateFlow("initial.email@example.com")
+    val userEmail: StateFlow<String> = _userEmail
 
     private val _articles = MutableStateFlow<List<Article>>(emptyList())
     val articles: StateFlow<List<Article>> = _articles
@@ -53,10 +58,16 @@ class UserViewModel : ViewModel() {
         password = inputPassword
     }
 
+    fun updateUserProfile(name: String, email: String) {
+        _userName.value = name
+        _userEmail.value = email
+    }
+    fun resetProfile() {
+        _userName.value = "Initial Name"
+        _userEmail.value = "initial.email@example.com"
+    }
 
 
-
-    // Save access token and login status
     fun getLoginData(callback:(token: String, isLoggedIn: Boolean) ->Unit) {
         callback(accessToken, isLogin)
     }

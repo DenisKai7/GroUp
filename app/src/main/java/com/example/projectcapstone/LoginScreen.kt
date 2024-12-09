@@ -124,7 +124,7 @@ fun LoginScreen(navController: NavController,viewModel: UserViewModel = viewMode
                         isLoading = false
                         if (success) {
                             viewModel.getLoginData { token, isLoggedIn ->
-                                SessionManager.setUserData(context, token, email) // Simpan token dan email
+                                SessionManager.setUserData(context, token, email)
                             }
                             navController.navigate("HomePage")
                         } else {
