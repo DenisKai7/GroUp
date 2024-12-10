@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
                             EditScreen(
                                 navController = navController,
                                 viewModel = profileViewModel,
-                                language = language
+
                             )
                         }
                         composable(Routes.AboutUsScreen) {

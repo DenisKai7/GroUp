@@ -1,5 +1,5 @@
 [versions]
-agp = "8.6.0"
+agp = "8.5.1"
 hiltCompiler = "2.48"
 kotlin = "1.9.0"
 coreKtx = "1.15.0"
@@ -16,6 +16,7 @@ navigationCompose = "2.8.4"
 espressoCoreVersion = "3.5.1"
 runtimeLivedata = "1.7.5"
 kapt="1.8.0"
+okhttp3Version = "4.12.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,7 +40,8 @@ androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navig
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCoreVersion" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
-
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp3Version" }
+okhttpLogger = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3Version" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

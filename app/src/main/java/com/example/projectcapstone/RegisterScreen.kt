@@ -63,13 +63,13 @@ fun RegisterScreen(
         ) {
             var email by remember { mutableStateOf("") }
             var password by remember{ mutableStateOf("") }
-            var fullName by remember { mutableStateOf("") }
+            var Name by remember { mutableStateOf("") }
             var passwordVisible by remember { mutableStateOf(false) }
             val registerSuccess = remember { mutableStateOf(false) }
             val context = LocalContext.current
 
             Image(
-                painter = painterResource(id = R.drawable.logo), // Ganti dengan logo Anda
+                painter = painterResource(id = R.drawable.logo),
                 contentDescription = "Logo",
                 modifier = Modifier.size(250.dp)
             )
@@ -83,11 +83,11 @@ fun RegisterScreen(
             )
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Input Email
+
 
             OutlinedTextField(
                 value = email,
-                onValueChange = { email = it }, // Update email secara real-time
+                onValueChange = { email = it },
                 label = { Text("Masukkan Alamat Email") },
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Email, contentDescription = "Email Icon")
@@ -97,7 +97,7 @@ fun RegisterScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Input Nama Lengkap
+
             Text(
                 text = "Nama Lengkap",
                 fontSize = 16.sp,
@@ -107,8 +107,8 @@ fun RegisterScreen(
                     .align(Alignment.Start)
             )
             OutlinedTextField(
-                value = fullName,
-                onValueChange = { fullName = it }, // Update fullName secara real-time
+                value = Name,
+                onValueChange = { Name = it },
                 label = { Text("Masukkan Nama Lengkap") },
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Account Icon")
@@ -119,7 +119,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
 
-            // Input Kata Sandi
+
             Text(
                 text = "Kata Sandi",
                 fontSize = 16.sp,
@@ -151,23 +151,20 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Tombol Daftar
             Button(
                 onClick = {
-                    viewModel.register(email, password, fullName){ success,errorMessage ->
-                        if(success){
-                            viewModel.email = email
-                            viewModel.extractNameFromEmail()
+                    viewModel.register(email, password, Name) { success, errorMessage ->
+                        if (success) {
+                            // Simpan data user di SharedPreferences
+                            SessionManager.saveUserData(context, Name, email, null)
                             navController.navigate("loginScreen")
-                        }else{
+                        } else {
                             Toast.makeText(
                                 context,
-                                errorMessage?:"Resgister anda gagal",
+                                errorMessage ?: "Register gagal",
                                 Toast.LENGTH_LONG
-
                             ).show()
                         }
-
                     }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF66BB6A)),
