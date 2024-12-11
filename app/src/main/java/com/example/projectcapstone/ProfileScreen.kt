@@ -7,8 +7,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -20,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,16 +41,15 @@ fun ProfileScreen(
     isDarkTheme: Boolean,
     onThemeChange: (Boolean) -> Unit,
 
-    language: String,
-    onLanguageChange: (String) -> Unit
 ) {
-
+    val scrollState = rememberScrollState()
     val context = LocalContext.current
     val (name, email, profileImageUri) = SessionManager.getUserData(context)
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(scrollState)
     ) {
         // Back Button
         IconButton(
@@ -72,13 +74,27 @@ fun ProfileScreen(
                 model = profileImageUri ?: "https://example.com/default_profile_image.png",
                 contentDescription = "Profile Picture",
                 modifier = Modifier
-                    .size(100.dp)
+                    .size(200.dp)
                     .clip(CircleShape)
                     .background(Color.Gray),
                 contentScale = ContentScale.Crop
             )
-            Text(text = name ?: "No Name", style = MaterialTheme.typography.bodyLarge)
-            Text(text = email ?: "No Email", style = MaterialTheme.typography.bodyLarge)
+
+            Text(
+                text = name ?: "No Name",
+                style = TextStyle(
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier.padding(top = 15.dp)
+            )
+            Text(
+                text = email ?: "No Email",
+                style = TextStyle(
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Normal
+                )
+            )
         }
 
         // Options Section
@@ -90,11 +106,10 @@ fun ProfileScreen(
                 .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp))
         ) {
             ProfileOption(icon = Icons.Default.Info, label = "About us", onClick = {navController.navigate(Routes.AboutUsScreen)})
-            ProfileOption(icon = Icons.Default.Help, label = "Help", onClick = {})
+//            ProfileOption(icon = Icons.Default.Help, label = "Help", onClick = {})
             ProfileOption(icon = Icons.Default.Settings, label = "Edit Profile", onClick = {navController.navigate(Routes.EditScreen)})
-            LanguageToggle(isBahasa = language == "Bahasa", onLanguageChange = onLanguageChange)
 
-            // Switch untuk Dark Mode
+
             ThemeOption(isDarkTheme = isDarkTheme, onThemeChange = onThemeChange)
 
             ProfileOption(
@@ -143,35 +158,6 @@ fun ProfileOption(icon: ImageVector, label: String, labelColor: Color = Material
     Divider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), thickness = 1.dp)
 }
 
-@Composable
-fun LanguageToggle(isBahasa: Boolean, onLanguageChange: (String) -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 12.dp, horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = Icons.Default.Language,
-            contentDescription = "Language",
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.size(24.dp)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = if (isBahasa) "Bahasa Indonesia" else "English",
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Switch(
-            checked = isBahasa,
-            onCheckedChange = { isChecked ->
-                onLanguageChange(if (isChecked) "Bahasa" else "English")
-            }
-        )
-    }
-}
 
 @Composable
 fun ThemeOption(isDarkTheme: Boolean, onThemeChange: (Boolean) -> Unit) {
@@ -209,8 +195,7 @@ fun ProfilePreview() {
         navController = rememberNavController(),
         isDarkTheme = false,
         onThemeChange = {},
-        language = "English",
-        onLanguageChange = {}
+
     )
 }
 
