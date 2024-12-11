@@ -29,7 +29,8 @@
     "joi": "^17.13.1",
     "jsonwebtoken": "^9.0.2",
     "uuid": "^9.0.1",
-    "winston": "^3.13.0"
+    "winston": "^3.13.0",
+    "@tensorflow/tfjs-node": "^4.22.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.24.5",

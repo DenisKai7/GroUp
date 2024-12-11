@@ -8,8 +8,8 @@ key.json
 src/client.js
 src/service/activity_service.js
 src/controller/activity_controller.js
-src/validation/model_validation.js
 src/application/database.js
 test/model.test.js
 test/test.json
-docs/model.md
+models/model3
+models1
