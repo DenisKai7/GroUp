@@ -20,17 +20,42 @@ import androidx.compose.runtime.setValue
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.dicoding.picodiploma.loginwithanimation.data.pref.dataStore
 import com.example.projectcapstone.data.api.ApiClient
+import com.example.projectcapstone.data.api.ApiService
 import com.example.projectcapstone.data.api.Article
 import com.example.projectcapstone.data.api.GetUserResponse
+import com.example.projectcapstone.data.api.PredictData
+import com.example.projectcapstone.data.api.PredictRequest
+import com.example.projectcapstone.data.api.PredictResponse
 import com.example.projectcapstone.data.api.UpdateUserRequest
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class UserViewModel : ViewModel() {
+
+    private val _similarCases = MutableLiveData<List<PredictData>>()
+    val similarCases: LiveData<List<PredictData>> get() = _similarCases
+
+    private val _predictStuntingResult = MutableLiveData<PredictResponse>()
+    val predictStuntingResult: LiveData<PredictResponse> get() = _predictStuntingResult
+
+    private val _predictSimilarityResult = MutableLiveData<PredictResponse>()
+    val predictSimilarityResult: LiveData<PredictResponse> = _predictSimilarityResult
+
+
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String> get() = _errorMessage
+
+    private val apiService = ApiConfig.getApiService()
 
     private val _userName = MutableStateFlow("Initial Name")
     val userName: StateFlow<String> = _userName
@@ -180,13 +205,67 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    fun predictStunting(request: PredictRequest) {
+        if (request.gender != "Male" && request.gender != "Female") {
+            _errorMessage.value = "Gender must be one of [Male or Female]"
+            return
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            val call = apiService.predictStunting(request)
+            call.enqueue(object : Callback<PredictResponse> {
+                override fun onResponse(
+                    call: Call<PredictResponse>,
+                    response: Response<PredictResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        _predictStuntingResult.postValue(response.body())
+                    } else {
+                        _errorMessage.postValue("Error: ${response.message()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<PredictResponse>, t: Throwable) {
+                    _errorMessage.postValue("Failure: ${t.message}")
+                }
+            })
+        }
+    }
+
+    fun predictSimilarity(request: PredictRequest) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val call = apiService.predictSimilarity(request)
+            call.enqueue(object : Callback<PredictResponse> {
+                override fun onResponse(
+                    call: Call<PredictResponse>,
+                    response: Response<PredictResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val responseData = response.body()
+                        responseData?.let {
+                            if (it.errors.isNullOrEmpty()) {
+                                _predictSimilarityResult.postValue(it)
+                            } else {
+                                _errorMessage.postValue(it.errors)
+                            }
+                        }
+                    } else {
+                        _errorMessage.postValue("Error: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<PredictResponse>, t: Throwable) {
+                    _errorMessage.postValue("Failure: ${t.message}")
+                }
+            })
+        }
+    }
+
+
+
 
     data class ErrorResponse(
         val errors: Map<String, String>? = null
     )
-
-
-
     var email by mutableStateOf("")
     var name by mutableStateOf("")
     var password by mutableStateOf("")

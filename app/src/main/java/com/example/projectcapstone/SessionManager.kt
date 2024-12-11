@@ -3,11 +3,13 @@ package com.example.projectcapstone
 import android.content.Context
 import android.content.SharedPreferences
 import android.media.session.MediaSession.Token
+import android.util.Log
 
 object SessionManager {
     const val KEY_LOGIN: String = "login"
     const val KEY_TOKEN: String = "token"
     const val KEY_EMAIL: String = "email"
+    const val KEY_LOGOUT:String = "logout"
     private const val NAME_KEY = "NAME_KEY"
     private const val PROFILE_IMAGE_KEY = "PROFILE_IMAGE_KEY"
 
@@ -67,5 +69,16 @@ object SessionManager {
             clear()
             apply()
         }
+
     }
+    fun logout(context: Context) {
+        clearData(context)
+        val isLoggedIn = getIsLogin(context)
+        if (!isLoggedIn) {
+            Log.d("SessionManager", "Logout berhasil!")
+        } else {
+            Log.d("SessionManager", "Logout gagal!")
+        }
+    }
+
 }

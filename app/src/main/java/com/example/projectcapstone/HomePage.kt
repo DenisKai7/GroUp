@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -124,19 +125,53 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .border(
+                            width = 4.dp,
+                            color = Color.Green,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .background(
+                            color = Color(0xFF90EE90),
+                            shape = RoundedCornerShape(8.dp)
+                        )
                 ) {
-                    Box(
+                    Row(
                         modifier = Modifier
-                            .weight(2f)
-                            .height(200.dp)
-                            .background(Color(0xFF76FF03), shape = RoundedCornerShape(8.dp))
+                            .fillMaxSize()
+                            .padding(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-
+                        Image(
+                            painter = painterResource(id = R.drawable.logo),
+                            contentDescription = "Stunting",
+                            modifier = Modifier
+                                .size(100.dp)
+                        )
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = "Info",
+                                color = Color.Black,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Text(
+                                text = "Stunting adalah kondisi kurang gizi kronis pada anak yang ditandai dengan tinggi badan di bawah standar.",
+                                color = Color.Black,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal
+                            )
+                        }
                     }
                 }
+
+
 
                 Spacer(modifier = Modifier.height(8.dp))
 
