@@ -71,6 +71,10 @@ class MainActivity : ComponentActivity() {
 
                             )
                         }
+                        composable(Routes.AboutUsScreen) {
+                            AboutUsScreen(navController = navController)
+                        }
+
                     }
                 }
             }
