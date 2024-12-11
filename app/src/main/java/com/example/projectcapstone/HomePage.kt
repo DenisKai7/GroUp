@@ -121,7 +121,6 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
-<<<<<<< HEAD
                 // 'Apa itu stunting?' Box
                 Box(
                     modifier = Modifier
@@ -170,61 +169,11 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
                                     }
                                 )
                             }
-=======
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .border(
-                            width = 4.dp,
-                            color = Color.Green,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .background(
-                            color = Color(0xFF90EE90),
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.logo),
-                            contentDescription = "Stunting",
-                            modifier = Modifier
-                                .size(100.dp)
-                        )
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(
-                                text = "Info",
-                                color = Color.Black,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                            Text(
-                                text = "Stunting adalah kondisi kurang gizi kronis pada anak yang ditandai dengan tinggi badan di bawah standar.",
-                                color = Color.Black,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Normal
-                            )
->>>>>>> ed1cab825e86713c34f18820fdc65867d7ccbf8b
                         }
                     }
                 }
 
-<<<<<<< HEAD
                 Spacer(modifier = Modifier.height(25.dp))
-=======
-
-
-                Spacer(modifier = Modifier.height(8.dp))
->>>>>>> ed1cab825e86713c34f18820fdc65867d7ccbf8b
 
                 // 'Panduan Orang Tua' Box
                 Box(
