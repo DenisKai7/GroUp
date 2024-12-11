@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
                                 onThemeChange = { isDarkTheme = !isDarkTheme },
                                 language = language,
                                 onLanguageChange = { language = it },
-                                viewModel = profileViewModel
+
                             )
                         }
                         composable(Routes.EditScreen) {
@@ -71,6 +71,10 @@ class MainActivity : ComponentActivity() {
 
                             )
                         }
+                        composable(Routes.AboutUsScreen) {
+                            AboutUsScreen(navController = navController)
+                        }
+
                     }
                 }
             }

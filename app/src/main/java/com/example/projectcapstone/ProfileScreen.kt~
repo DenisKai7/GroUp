@@ -1,7 +1,6 @@
 package com.example.projectcapstone
 
 import android.net.Uri
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -24,26 +23,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.projectcapstone.SessionManager.KEY_EMAIL
-import com.example.projectcapstone.ui.theme.UserViewModel
 
 @Composable
 fun ProfileScreen(
     navController: NavController,
     isDarkTheme: Boolean,
     onThemeChange: (Boolean) -> Unit,
-
-    language: String,
-    onLanguageChange: (String) -> Unit
+    viewModel: ProfileViewModel
 ) {
-
+    val profileImageUri = viewModel.profileImageUri
     val context = LocalContext.current
-    val (name, email, profileImageUri) = SessionManager.getUserData(context)
+
+
+    // UI untuk ProfileScreen
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -77,8 +73,18 @@ fun ProfileScreen(
                     .background(Color.Gray),
                 contentScale = ContentScale.Crop
             )
-            Text(text = name ?: "No Name", style = MaterialTheme.typography.bodyLarge)
-            Text(text = email ?: "No Email", style = MaterialTheme.typography.bodyLarge)
+            Text(
+                text = viewModel.name,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+            Text(
+                text = viewModel.email,
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+            )
         }
 
         // Options Section
@@ -89,10 +95,10 @@ fun ProfileScreen(
                 .padding(16.dp)
                 .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp))
         ) {
-            ProfileOption(icon = Icons.Default.Info, label = "About us", onClick = {navController.navigate(Routes.AboutUsScreen)})
+            ProfileOption(icon = Icons.Default.Info, label = "About us", onClick = {navController.navigate()})
             ProfileOption(icon = Icons.Default.Help, label = "Help", onClick = {})
             ProfileOption(icon = Icons.Default.Settings, label = "Edit Profile", onClick = {navController.navigate(Routes.EditScreen)})
-            LanguageToggle(isBahasa = language == "Bahasa", onLanguageChange = onLanguageChange)
+            LanguageOption()
 
             // Switch untuk Dark Mode
             ThemeOption(isDarkTheme = isDarkTheme, onThemeChange = onThemeChange)
@@ -101,24 +107,11 @@ fun ProfileScreen(
                 icon = Icons.Default.ExitToApp,
                 label = "Logout",
                 labelColor = Color.Red,
-                onClick = {
-                    SessionManager.logout(context)
-                    if (!SessionManager.getIsLogin(context)) {
-                        Toast.makeText(context, "Logout berhasil", Toast.LENGTH_SHORT).show()
-
-                        navController.navigate(Routes.LoginScreen) {
-                            popUpTo(0) { inclusive = true }
-                        }
-                    } else {
-                        Toast.makeText(context, "Logout gagal", Toast.LENGTH_SHORT).show()
-                    }
-                }
+                onClick = { navController.popBackStack() }
             )
-
         }
     }
 }
-
 
 
 
@@ -144,7 +137,7 @@ fun ProfileOption(icon: ImageVector, label: String, labelColor: Color = Material
 }
 
 @Composable
-fun LanguageToggle(isBahasa: Boolean, onLanguageChange: (String) -> Unit) {
+fun LanguageOption() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -158,19 +151,14 @@ fun LanguageToggle(isBahasa: Boolean, onLanguageChange: (String) -> Unit) {
             modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = if (isBahasa) "Bahasa Indonesia" else "English",
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.onBackground
-        )
+        Text(text = "Bahasa", fontSize = 16.sp, color = MaterialTheme.colorScheme.onBackground)
         Spacer(modifier = Modifier.weight(1f))
         Switch(
-            checked = isBahasa,
-            onCheckedChange = { isChecked ->
-                onLanguageChange(if (isChecked) "Bahasa" else "English")
-            }
+            checked = false,
+            onCheckedChange = { /* Handle language toggle */ }
         )
     }
+    Divider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), thickness = 1.dp)
 }
 
 @Composable
@@ -198,19 +186,20 @@ fun ThemeOption(isDarkTheme: Boolean, onThemeChange: (Boolean) -> Unit) {
     Divider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), thickness = 1.dp)
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun ProfilePreview() {
-    val mockContext = LocalContext.current
-    val mockData = Triple("John Doe", "johndoe@example.com", null)
-    SessionManager.saveUserData(mockContext, mockData.first, mockData.second)
+    val mockViewModel = ProfileViewModel().apply {
+        name = "John Doe"
+        email = "john.doe@example.com"
+    }
 
     ProfileScreen(
         navController = rememberNavController(),
         isDarkTheme = false,
         onThemeChange = {},
-        language = "English",
-        onLanguageChange = {}
+        viewModel = mockViewModel
     )
 }
 
