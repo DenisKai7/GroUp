@@ -1,6 +1,7 @@
 package com.example.projectcapstone
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -36,14 +37,13 @@ fun ProfileScreen(
     navController: NavController,
     isDarkTheme: Boolean,
     onThemeChange: (Boolean) -> Unit,
-    viewModel: UserViewModel,
+
     language: String,
     onLanguageChange: (String) -> Unit
 ) {
 
     val context = LocalContext.current
     val (name, email, profileImageUri) = SessionManager.getUserData(context)
-    // UI untuk ProfileScreen
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -102,12 +102,19 @@ fun ProfileScreen(
                 label = "Logout",
                 labelColor = Color.Red,
                 onClick = {
-                    SessionManager.clearData(context) // Hapus semua data pengguna
-                    navController.navigate(Routes.LoginScreen) {
-                        popUpTo(Routes.ProfileScreen) { inclusive = true } // Hapus semua layar sebelumnya
+                    SessionManager.logout(context)
+                    if (!SessionManager.getIsLogin(context)) {
+                        Toast.makeText(context, "Logout berhasil", Toast.LENGTH_SHORT).show()
+
+                        navController.navigate(Routes.LoginScreen) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    } else {
+                        Toast.makeText(context, "Logout gagal", Toast.LENGTH_SHORT).show()
                     }
                 }
             )
+
         }
     }
 }
@@ -202,7 +209,6 @@ fun ProfilePreview() {
         navController = rememberNavController(),
         isDarkTheme = false,
         onThemeChange = {},
-        viewModel = viewModel(),
         language = "English",
         onLanguageChange = {}
     )

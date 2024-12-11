@@ -1,5 +1,6 @@
 package com.example.projectcapstone.data.api
 
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -25,4 +26,10 @@ interface ApiService {
     suspend fun logout(
         @Header("Authorization") token: String
     ): Response<LogoutResponse>
+
+    @POST("api/predicts/stunting")
+    fun predictStunting(@Body request: PredictRequest): Call<PredictResponse>
+
+    @POST("api/predicts/similiarity")
+    fun predictSimilarity(@Body request: PredictRequest): Call<PredictResponse>
 }

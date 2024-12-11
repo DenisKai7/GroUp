@@ -65,4 +65,28 @@ data class LogoutResponse(
     val errors: String? = null
 )
 
+//Predict model
+data class PredictRequest(
+    val name: String,
+    val age: String,
+    val weight: String,
+    val height: String,
+    val gender: String
+)
+
+data class PredictResponse(
+    val data: PredictData? = null,
+    val errors: String? = null
+)
+
+
+data class PredictData(
+    val name: String,
+    val age: String,
+    val weight: String,
+    val height: String,
+    val gender: String,
+    val status: String
+)
+
 
