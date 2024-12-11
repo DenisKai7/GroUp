@@ -60,6 +60,7 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
 
     ) {
         if (isLoading.value) {
+            // Menampilkan loading indicator
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -92,7 +93,7 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
                     // Date
                     Text(
                         text = date,
-                        color = Color.Gray,
+                        color = Color(0xFF388E3C),
                         fontSize = 14.sp
                     )
                 }
@@ -109,7 +110,7 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
 
                 Text(
                     text = "Sudah cek tumbuh kembang anak hari ini?",
-                    color = Color.Gray,
+                    color = Color(0xFF388E3C),
                     fontSize = 14.sp
                 )
 
@@ -118,8 +119,8 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
 
                 Text(
                     text = "Info",
-                    color = Color.Gray,
-                    fontSize = 16.sp,
+                    color =Color(0xFF388E3C),
+                    fontSize = 24.sp,
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -200,8 +201,8 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
 
                 Text(
                     text = "Artikel",
-                    color = Color.Gray,
-                    fontSize = 16.sp,
+                    color = Color(0xFF388E3C),
+                    fontSize = 24.sp,
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(10.dp))
