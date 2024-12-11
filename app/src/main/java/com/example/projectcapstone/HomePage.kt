@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -11,17 +12,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Article
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -40,45 +42,42 @@ import java.util.*
 
 // Main Screen
 @Composable
-fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(),language: String) {
+fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(), language: String) {
     val welcomeText = if (language == "Bahasa") "Selamat Datang" else "Welcome"
     val scrollState = rememberScrollState()
     val articles = viewModel.articles.collectAsState(initial = emptyList())
     val date = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale("id")).format(Date())
     val isLoading = viewModel.isLoading.collectAsState(initial = false)
     val context = LocalContext.current
+
     LaunchedEffect(Unit) {
         viewModel.fetchArticles()
     }
-    val email = SessionManager.getEmail(context)
+
+    val email = SessionManager.getEmail(context) ?: "User"
     val name = extractNameFromEmail(email)
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-
+        modifier = Modifier.fillMaxSize()
     ) {
         if (isLoading.value) {
-            // Menampilkan loading indicator
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color(0xAAFFFFFF)),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(color = Color(0xFF388E3C))
+                androidx.compose.material.CircularProgressIndicator(color = Color(0xFF388E3C))
             }
         } else {
             Column(
-
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
                     .verticalScroll(scrollState)
                     .align(Alignment.TopStart)
-
             ) {
-                // Logo and Date
+                // Header Section
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -89,7 +88,6 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
                         contentDescription = "Logo",
                         modifier = Modifier.size(80.dp)
                     )
-                    // Date
                     Text(
                         text = date,
                         color = Color.DarkGray,
@@ -98,7 +96,6 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-
 
                 Text(
                     text = "$welcomeText, $name",
@@ -115,7 +112,7 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-
+                // Info Section
                 Text(
                     text = "Info",
                     color = Color.Black,
@@ -124,67 +121,138 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                // 'Apa itu stunting?' Box
+                Box(
+                    modifier = Modifier
+                        .shadow(8.dp, shape = RoundedCornerShape(16.dp))
+                        .background(Color(0xFF90EE90), shape = RoundedCornerShape(16.dp))
+                        .padding(16.dp)
+                        .fillMaxWidth()
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .weight(2f)
-                            .height(200.dp)
-                            .background(Color(0xFF76FF03), shape = RoundedCornerShape(8.dp))
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.Start
                     ) {
+                        Text(
+                            text = "Apa itu stunting?",
+                            color = Color.Black,
+                            fontSize = 23.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
 
+                        // Konten Stunting
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.stunting),
+                                contentDescription = null,
+                                modifier = Modifier.size(100.dp)
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Column {
+                                Text(
+                                    text = "Stunting adalah kondisi gagal tumbuh pada anak akibat kekurangan gizi kronis, terutama pada periode awal kehidupan, yaitu 1.000 hari pertama kehidupan (sejak kehamilan hingga usia dua tahun).",
+                                    color = Color.Black,
+                                    fontSize = 14.sp,
+                                    lineHeight = 20.sp
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = "Baca Selengkapnya",
+                                    color = Color.Blue,
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.clickable {
+                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://drive.google.com/file/d/14JKJ_LMPq-oceqFBNV1O9YE59O6Xfbte/view?usp=drive_link"))
+                                        context.startActivity(intent)
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(25.dp))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                // 'Panduan Orang Tua' Box
+                Box(
+                    modifier = Modifier
+                        .shadow(8.dp, shape = RoundedCornerShape(16.dp))
+                        .background(Color(0xFF90EE90), shape = RoundedCornerShape(16.dp))
+                        .padding(16.dp)
+                        .fillMaxWidth()
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(200.dp)
-                            .background(Color(0xFFFFEB3B), shape = RoundedCornerShape(8.dp))
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.Start
                     ) {
+                        Text(
+                            text = "Panduan orang tua",
+                            color = Color.Black,
+                            fontSize = 23.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
 
-                    }
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(200.dp)
-                            .background(Color(0xFF03A9F4), shape = RoundedCornerShape(8.dp))
-                    ) {
-
+                        // Konten Panduan Orang Tua
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.parents),
+                                contentDescription = null,
+                                modifier = Modifier.size(100.dp)
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Column {
+                                Text(
+                                    text = "Panduan ini memberikan tips dan langkah-langkah praktis bagi orang tua untuk mendukung tumbuh kembang anak secara optimal.",
+                                    color = Color.Black,
+                                    fontSize = 14.sp,
+                                    lineHeight = 20.sp
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = "Baca Selengkapnya",
+                                    color = Color.Blue,
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.clickable {
+                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://drive.google.com/file/d/1etmI1rJSGzucyoAFocOH-eo_7TuPRRT_/view?usp=sharing"))
+                                        context.startActivity(intent)
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
 
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(25.dp))
 
-                Text(
-                    text = "Artikel",
-                    color = Color.Black,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                articles.value.forEach { article ->
-                    ArticleItem(article = article)
+                // Article Section
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = "Artikel",
+                        color = Color.Black,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    articles.value.forEach { article ->
+                        ArticleItem(article = article)
+                    }
                 }
-
             }
-            Spacer(modifier = Modifier.height(30.dp))
+
+            // Bottom Navigation
             BottomNavigationBar(modifier = Modifier.align(Alignment.BottomCenter), navController)
         }
     }
 }
+
 fun extractNameFromEmail(email: String): String {
     return email.substringBefore("@")
 }
-
 
 @Composable
 fun ArticleItem(article: Article) {
@@ -204,7 +272,6 @@ fun ArticleItem(article: Article) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Gambar Artikel
             if (article.urlImage != "kosong") {
                 Image(
                     painter = rememberAsyncImagePainter(article.urlImage),
@@ -223,7 +290,6 @@ fun ArticleItem(article: Article) {
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Detail Artikel
             Column {
                 Text(
                     text = article.title,
@@ -240,8 +306,6 @@ fun ArticleItem(article: Article) {
     }
 }
 
-
-
 @Composable
 fun BottomNavigationBar(modifier: Modifier = Modifier, navController: NavController) {
     BottomNavigation(
@@ -249,20 +313,19 @@ fun BottomNavigationBar(modifier: Modifier = Modifier, navController: NavControl
             .padding(top = 30.dp)
             .fillMaxWidth()
             .height(56.dp),
-        backgroundColor = Color.White,
-        contentColor = Color.White
+        backgroundColor = Color.White
     ) {
         BottomNavigationItem(
             icon = { Icon(Icons.Filled.Home, contentDescription = "Home") },
             label = { Text("Home") },
             selected = true,
-            selectedContentColor = Color.White,
-            unselectedContentColor = Color.Black,
-            onClick = {  navController.navigate(Routes.HomePage) }
+            selectedContentColor = Color(0xFF388E3C),
+            unselectedContentColor = Color.Gray,
+            onClick = { navController.navigate(Routes.HomePage) }
         )
         BottomNavigationItem(
-            icon = { Icon(Icons.Filled.Article, contentDescription = " Check") },
-            label = { Text(" Check") },
+            icon = { Icon(Icons.Filled.Article, contentDescription = "Check") },
+            label = { Text("Check") },
             selected = false,
             onClick = { navController.navigate("StatusCheckScreen") }
         )
@@ -275,12 +338,11 @@ fun BottomNavigationBar(modifier: Modifier = Modifier, navController: NavControl
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun HomePreview() {
     val navController = rememberNavController()
     val viewModel = UserViewModel()
     val language = "English"
-    HomePage(navController = navController, viewModel = viewModel, language =language )
+    HomePage(navController = navController, viewModel = viewModel, language = language)
 }
