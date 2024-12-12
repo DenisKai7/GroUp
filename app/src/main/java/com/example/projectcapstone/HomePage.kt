@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -121,112 +122,120 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // 'Apa itu stunting?' Box
-                Box(
+                LazyRow(
                     modifier = Modifier
-                        .shadow(8.dp, shape = RoundedCornerShape(16.dp))
-                        .background(Color(0xFF90EE90), shape = RoundedCornerShape(16.dp))
-                        .padding(16.dp)
                         .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.Start
-                    ) {
-                        Text(
-                            text = "Apa itu stunting?",
-                            color = Color.Black,
-                            fontSize = 23.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        // Konten Stunting
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
+                    item {
+                        // 'Apa itu stunting?' Box
+                        Box(
+                            modifier = Modifier
+                                .shadow(8.dp, shape = RoundedCornerShape(16.dp))
+                                .background(Color(0xFF90EE90), shape = RoundedCornerShape(16.dp))
+                                .padding(16.dp)
+                                .width(300.dp)
                         ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.stunting),
-                                contentDescription = null,
-                                modifier = Modifier.size(100.dp)
-                            )
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Column {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.Start
+                            ) {
                                 Text(
-                                    text = "Stunting adalah kondisi gagal tumbuh pada anak akibat kekurangan gizi kronis, terutama pada periode awal kehidupan, yaitu 1.000 hari pertama kehidupan (sejak kehamilan hingga usia dua tahun).",
+                                    text = "Apa itu stunting?",
                                     color = Color.Black,
-                                    fontSize = 14.sp,
-                                    lineHeight = 20.sp
+                                    fontSize = 23.sp,
+                                    fontWeight = FontWeight.Bold
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
-                                Text(
-                                    text = "Baca Selengkapnya",
-                                    color = Color.Blue,
-                                    fontSize = 14.sp,
-                                    modifier = Modifier.clickable {
-                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://drive.google.com/file/d/14JKJ_LMPq-oceqFBNV1O9YE59O6Xfbte/view?usp=drive_link"))
-                                        context.startActivity(intent)
+
+                                // Konten Stunting
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.stunting),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(100.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(16.dp))
+                                    Column {
+                                        Text(
+                                            text = "Stunting adalah kondisi gagal tumbuh pada anak akibat kekurangan gizi kronis, terutama pada periode awal kehidupan, yaitu 1.000 hari pertama kehidupan (sejak kehamilan hingga usia dua tahun).",
+                                            color = Color.Black,
+                                            fontSize = 14.sp,
+                                            lineHeight = 20.sp
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(
+                                            text = "Baca Selengkapnya",
+                                            color = Color.Blue,
+                                            fontSize = 14.sp,
+                                            modifier = Modifier.clickable {
+                                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://drive.google.com/file/d/14JKJ_LMPq-oceqFBNV1O9YE59O6Xfbte/view?usp=drive_link"))
+                                                context.startActivity(intent)
+                                            }
+                                        )
                                     }
+                                }
+                            }
+                        }
+                    }
+
+                    item {
+                        // 'Panduan Orang Tua' Box
+                        Box(
+                            modifier = Modifier
+                                .shadow(8.dp, shape = RoundedCornerShape(16.dp))
+                                .background(Color(0xFF90EE90), shape = RoundedCornerShape(16.dp))
+                                .padding(16.dp)
+                                .width(300.dp)
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.Start
+                            ) {
+                                Text(
+                                    text = "Panduan orang tua",
+                                    color = Color.Black,
+                                    fontSize = 23.sp,
+                                    fontWeight = FontWeight.Bold
                                 )
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                // Konten Panduan Orang Tua
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.parents),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(100.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(16.dp))
+                                    Column {
+                                        Text(
+                                            text = "Panduan ini memberikan tips dan langkah-langkah praktis bagi orang tua untuk mendukung tumbuh kembang anak secara optimal.",
+                                            color = Color.Black,
+                                            fontSize = 14.sp,
+                                            lineHeight = 20.sp
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(
+                                            text = "Baca Selengkapnya",
+                                            color = Color.Blue,
+                                            fontSize = 14.sp,
+                                            modifier = Modifier.clickable {
+                                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://drive.google.com/file/d/1etmI1rJSGzucyoAFocOH-eo_7TuPRRT_/view?usp=sharing"))
+                                                context.startActivity(intent)
+                                            }
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
                 }
-
-                Spacer(modifier = Modifier.height(25.dp))
-
-                // 'Panduan Orang Tua' Box
-                Box(
-                    modifier = Modifier
-                        .shadow(8.dp, shape = RoundedCornerShape(16.dp))
-                        .background(Color(0xFF90EE90), shape = RoundedCornerShape(16.dp))
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.Start
-                    ) {
-                        Text(
-                            text = "Panduan orang tua",
-                            color = Color.Black,
-                            fontSize = 23.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        // Konten Panduan Orang Tua
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.parents),
-                                contentDescription = null,
-                                modifier = Modifier.size(100.dp)
-                            )
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Column {
-                                Text(
-                                    text = "Panduan ini memberikan tips dan langkah-langkah praktis bagi orang tua untuk mendukung tumbuh kembang anak secara optimal.",
-                                    color = Color.Black,
-                                    fontSize = 14.sp,
-                                    lineHeight = 20.sp
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text(
-                                    text = "Baca Selengkapnya",
-                                    color = Color.Blue,
-                                    fontSize = 14.sp,
-                                    modifier = Modifier.clickable {
-                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://drive.google.com/file/d/1etmI1rJSGzucyoAFocOH-eo_7TuPRRT_/view?usp=sharing"))
-                                        context.startActivity(intent)
-                                    }
-                                )
-                            }
-                        }
-                    }
-                }
-
                 Spacer(modifier = Modifier.height(25.dp))
 
                 // Article Section
