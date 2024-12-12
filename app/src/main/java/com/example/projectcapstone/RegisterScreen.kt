@@ -47,7 +47,6 @@ fun RegisterScreen(
     navController: NavController,
     viewModel: UserViewModel = viewModel(),
 ) {
-    val isloading by viewModel.isLoading.collectAsState()
     val registerResult by viewModel.registerResult.
     collectAsState()
     Box(modifier = Modifier.fillMaxSize()) {
@@ -65,7 +64,6 @@ fun RegisterScreen(
             var password by remember{ mutableStateOf("") }
             var Name by remember { mutableStateOf("") }
             var passwordVisible by remember { mutableStateOf(false) }
-            val registerSuccess = remember { mutableStateOf(false) }
             val context = LocalContext.current
 
             Image(
@@ -155,7 +153,6 @@ fun RegisterScreen(
                 onClick = {
                     viewModel.register(email, password, Name) { success, errorMessage ->
                         if (success) {
-                            // Simpan data user di SharedPreferences
                             SessionManager.saveUserData(context, Name, email, null)
                             navController.navigate("loginScreen")
                         } else {
@@ -203,7 +200,7 @@ fun BelakangShapes() {
         val width = size.width
         val height = size.height
 
-        // Blue shape
+
         val bluePath = Path().apply {
             moveTo(0f, 0f)
             lineTo(width, 0.1f)
@@ -213,7 +210,7 @@ fun BelakangShapes() {
         }
         drawPath(path = bluePath, color = Color.Cyan)
 
-        // Yellow shape
+
         val yellowPath = Path().apply {
             moveTo(1f, 6f * 0.9f)
             lineTo(width, height * 0.3f)
@@ -223,7 +220,7 @@ fun BelakangShapes() {
         }
         drawPath(path = yellowPath, color = Color.Yellow)
 
-        // Green shape
+
         val greenPath = Path().apply {
             moveTo(2f, height * 0.4f)
             lineTo(1f, height * 0.2f)

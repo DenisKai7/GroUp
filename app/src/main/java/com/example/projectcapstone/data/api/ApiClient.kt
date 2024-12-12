@@ -47,5 +47,4 @@ object ApiClient {
             .create(ArticleApiService::class.java)
     }
 }
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_prefs")
 

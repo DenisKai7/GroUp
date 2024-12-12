@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,11 +25,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,7 +41,6 @@ import com.example.projectcapstone.ui.theme.UserViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-// Main Screen
 @Composable
 fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(), language: String) {
     val welcomeText = if (language == "Bahasa") "Selamat Datang" else "Welcome"
@@ -81,7 +77,6 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
                     .verticalScroll(scrollState)
                     .align(Alignment.TopStart)
             ) {
-                // Header Section
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -104,7 +99,7 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
                 Text(
                     text = "$welcomeText, $name",
                     color = Color(0xFF388E3C),
-                    fontSize = 24.sp,
+                    fontSize = 34.sp,
                     fontWeight = FontWeight.Bold
                 )
 
@@ -116,7 +111,6 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Info Section
                 Text(
                     text = "Info",
                     color = MaterialTheme.colorScheme.onBackground,
@@ -125,7 +119,6 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Horizontal Scrollable Box with both "Apa itu Stunting?" and "Panduan Orang Tua"
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -142,10 +135,6 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
                                 color = Color.Green,
                                 shape = RoundedCornerShape(8.dp)
                             )
-//                            .background(
-//                                color = Color(0xFF90EE90),
-//                                shape = RoundedCornerShape(8.dp)
-//                            )
                     ) {
                         Row(
                             modifier = Modifier
@@ -201,10 +190,6 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
                                 color = Color.Green,
                                 shape = RoundedCornerShape(8.dp)
                             )
-//                            .background(
-//                                color = Color(0xFF90EE90),
-//                                shape = RoundedCornerShape(8.dp)
-//                            )
                     ) {
                         Row(
                             modifier = Modifier
@@ -250,7 +235,6 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
 
                 Spacer(modifier = Modifier.height(25.dp))
 
-                // Artikel Section
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
                         text = "Artikel",
@@ -265,7 +249,6 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
                 }
             }
 
-            // Bottom Navigation
             BottomNavigationBar(modifier = Modifier.align(Alignment.BottomCenter), navController)
         }
     }

@@ -41,7 +41,6 @@ fun StatusCheckScreen(navController: NavController) {
     val predictResult by predictViewModel.predictStuntingResult.observeAsState()
     val similarCasesResult by predictViewModel.predictSimilarityResult.observeAsState()
     val errorMessage by predictViewModel.errorMessage.observeAsState()
-    val predictData by predictViewModel.predictSimilarityResult.observeAsState()
 
 
     Box(
@@ -59,12 +58,10 @@ fun StatusCheckScreen(navController: NavController) {
                     .padding(16.dp)
                     .verticalScroll(scrollState)
             ) {
-                // Logo Section
                 LogoSection()
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Title Section
                 Text(
                     text = "Status Check",
                     fontSize = 24.sp,
@@ -76,21 +73,17 @@ fun StatusCheckScreen(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Input Form Section
                 DataAnakCard(predictViewModel)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Result Section
                 ResultCard(predictResult, errorMessage)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Similar Cases Section
                 SimilarCasesCard(similarCasesResult, errorMessage)
             }
 
-            // Bottom Navigation Bar
             BottomNavigationBars(navController = navController)
         }
     }
@@ -133,7 +126,6 @@ fun DataAnakCard(predictViewModel: UserViewModel) {
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Input fields
             OutlinedTextField(
                 value = namaAnak,
                 onValueChange = { namaAnak = it },

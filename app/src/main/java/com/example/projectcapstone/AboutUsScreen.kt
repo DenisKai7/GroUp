@@ -16,13 +16,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
@@ -35,7 +38,7 @@ fun AboutUsScreen(navController: NavController) {
             .verticalScroll(scrollState)
 
     ) {
-        // Header
+
         Header(navController)
 
         // Content
@@ -45,12 +48,12 @@ fun AboutUsScreen(navController: NavController) {
                 .padding(horizontal = 16.dp)
 
         ) {
-            Section(
+            SectionCard(
                 title = "Our Story",
                 content = "We are mentees of Bangkit 2024 batch 2, we come from several different campuses and from several different regions. Bangkit capstone project brought us together as teammates to create a mobile app product about stunting. Of course, distance and time are the main obstacles for us, but we learned a lot from Bangkit capstone project. So, thank you for everything."
             )
             Spacer(modifier = Modifier.height(16.dp))
-            ScrollableSection(
+            SectionCard(
                 title = "Our Mission",
                 content = "Our mission in the capstone project by raising the topic of stunting is as follows:\n" +
                         "- providing education and the latest information on the impacts and characteristics of stunting\n" +
@@ -69,31 +72,21 @@ fun AboutUsScreen(navController: NavController) {
     }
 }
 
-@Composable
-fun ScrollableSection(title: String,content: String){
-    Column {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        Text(
-            text = content,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Start
-        )
-
-    }
-}
 
 @Composable
 fun Header(navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.Green)
+            .background(
+                Brush.horizontalGradient(
+                    colors = listOf(
+                        Color(0xFF1E90FF),
+                        Color(0xFF9370DB)
+                    )
+                )
+            )
+
             .padding(vertical = 16.dp, horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -117,28 +110,38 @@ fun Header(navController: NavController) {
 }
 
 @Composable
-fun Section(title: String, content: String) {
-    Column {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        Text(
-            text = content,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center
-        )
-
+fun SectionCard(title: String, content: String) {
+    Card(
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        elevation = CardDefaults.cardElevation(4.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Text(
+                text = content,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    lineHeight = 26.sp,
+                    color = MaterialTheme.colorScheme.onBackground
+                ),
+                textAlign = TextAlign.Justify
+            )
+        }
     }
 }
 
+
 @Composable
 fun TeamSection() {
-
-
     val teamMembers = listOf(
         TeamMemberInfo("Retsa", "Mobile Dev", R.drawable.retsa,"https://www.linkedin.com/in/retsa-a-07a097233?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"),
         TeamMemberInfo("Farhat", "Mobile Dev", R.drawable.farhat,"https://www.linkedin.com/in/retsa-a-07a097233?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"),
@@ -152,7 +155,7 @@ fun TeamSection() {
     Column {
         Text(
             text = "Our Team",
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.padding(bottom = 16.dp)
         )
@@ -224,13 +227,20 @@ fun Footer() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.Green)
+            .background(
+                Brush.horizontalGradient(
+                    colors = listOf(
+                        Color(0xFF1E90FF),
+                        Color(0xFF9370DB)
+                    )
+                )
+            )
             .padding(16.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = "© 2023 Our Company. All rights reserved",
+                text = "© 2024 Our Company. All rights reserved",
                 color = Color.White,
                 style = MaterialTheme.typography.bodySmall
             )
@@ -246,7 +256,7 @@ data class TeamMemberInfo(
     val name: String,
     val role: String,
     val imageRes: Int,
-    val url: String? = null // URL bisa bersifat opsional
+    val url: String? = null
 )
 
 @Preview(showBackground = true)

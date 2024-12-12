@@ -75,22 +75,6 @@ class UserViewModel : ViewModel() {
     private val _loginResult = MutableStateFlow<Result<String>>(Result.Loading)
     val loginResult: StateFlow<Result<String>> = _loginResult
 
-    var profileImageUri by mutableStateOf<Uri?>(null)
-
-    fun saveUserData(inputEmail: String, inputName: String, inputPassword: String) {
-        email = inputEmail
-        name = inputName
-        password = inputPassword
-    }
-
-    fun updateUserProfile(name: String, email: String) {
-        _userName.value = name
-        _userEmail.value = email
-    }
-    fun resetProfile() {
-        _userName.value = "Initial Name"
-        _userEmail.value = "initial.email@example.com"
-    }
 
 
     fun getLoginData(callback:(token: String, isLoggedIn: Boolean) ->Unit) {

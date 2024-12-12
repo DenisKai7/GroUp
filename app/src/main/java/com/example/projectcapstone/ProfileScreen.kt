@@ -51,7 +51,7 @@ fun ProfileScreen(
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(scrollState)
     ) {
-        // Back Button
+
         IconButton(
             onClick = { navController.popBackStack() },
             modifier = Modifier.padding(start = 16.dp, top = 16.dp)
@@ -63,7 +63,7 @@ fun ProfileScreen(
             )
         }
 
-        // Profile Picture and Details
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -97,16 +97,15 @@ fun ProfileScreen(
             )
         }
 
-        // Options Section
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 50.dp)
                 .padding(16.dp)
-                .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp))
+                .background(color = Color.LightGray, shape = RoundedCornerShape(16.dp))
         ) {
             ProfileOption(icon = Icons.Default.Info, label = "About us", onClick = {navController.navigate(Routes.AboutUsScreen)})
-//            ProfileOption(icon = Icons.Default.Help, label = "Help", onClick = {})
             ProfileOption(icon = Icons.Default.Settings, label = "Edit Profile", onClick = {navController.navigate(Routes.EditScreen)})
 
 
