@@ -47,7 +47,7 @@ fun StatusCheckScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF1F8FF))
+
     ) {
         Column(
             modifier = Modifier

@@ -59,8 +59,6 @@ class MainActivity : ComponentActivity() {
                                 navController = navController,
                                 isDarkTheme = isDarkTheme,
                                 onThemeChange = { isDarkTheme = !isDarkTheme },
-                                language = language,
-                                onLanguageChange = { language = it },
 
                             )
                         }

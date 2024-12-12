@@ -204,7 +204,7 @@
                             val token = SessionManager.getAccessToken(context)
                             viewModel.updateUser(token, name) { success, message ->
                                 if (success) {
-                                    // Simpan data ke SessionManager
+
                                     SessionManager.saveUserData(context, name, email, selectedImageUri?.toString())
                                     println("Update successful: $message")
                                     navController.navigate(Routes.ProfileScreen) // Navigasi ke ProfileScreen
@@ -276,7 +276,6 @@
             name = "John Doe"
             email = "john.doe@example.com"
         }
-        val language = "English"
         EditScreen(
             navController = rememberNavController(),
             viewModel = mockViewModel,
