@@ -39,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        mlModelBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -58,6 +59,9 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.espresso.core)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.tensorflow.lite.support)
+    implementation(libs.tensorflow.lite.metadata)
+    implementation(libs.androidx.camera.core)
     debugImplementation ("androidx.compose.ui:ui-tooling:1.5.3")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")

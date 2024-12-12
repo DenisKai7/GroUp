@@ -17,6 +17,9 @@ espressoCoreVersion = "3.5.1"
 runtimeLivedata = "1.7.5"
 kapt="1.8.0"
 okhttp3Version = "4.12.0"
+tensorflowLiteSupport = "0.1.0"
+tensorflowLiteMetadata = "0.1.0"
+cameraCore = "1.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,6 +45,9 @@ espresso-core = { group = "androidx.test.espresso", name = "espresso-core", vers
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp3Version" }
 okhttpLogger = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3Version" }
+tensorflow-lite-support = { group = "org.tensorflow", name = "tensorflow-lite-support", version.ref = "tensorflowLiteSupport" }
+tensorflow-lite-metadata = { group = "org.tensorflow", name = "tensorflow-lite-metadata", version.ref = "tensorflowLiteMetadata" }
+androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraCore" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

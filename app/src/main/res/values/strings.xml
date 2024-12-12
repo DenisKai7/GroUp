@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Project capstone</string>
+    <string name="image_classifier_failed">Modelny mengalami error!!</string>
 </resources>
