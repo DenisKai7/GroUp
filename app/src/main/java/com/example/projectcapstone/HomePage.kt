@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,6 +30,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -92,7 +94,7 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
                     )
                     Text(
                         text = date,
-                        color = Color.DarkGray,
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontSize = 14.sp
                     )
                 }
@@ -108,123 +110,147 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
 
                 Text(
                     text = "Sudah cek tumbuh kembang anak hari ini?",
-                    color = Color.DarkGray,
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 14.sp
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
+                // Info Section
                 Text(
                     text = "Info",
                     color = MaterialTheme.colorScheme.onBackground,
-                    fontSize = 26.sp,
+                    fontSize = 24.sp,
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
-
-                Box(
+                // Horizontal Scrollable Box with both "Apa itu Stunting?" and "Panduan Orang Tua"
+                Row(
                     modifier = Modifier
-
-                        .padding(16.dp)
                         .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState())
+                        .padding(8.dp)
                 ) {
-                    Row(
+                    // Apa itu stunting? Box
+                    Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .horizontalScroll(rememberScrollState()), // Enable horizontal scrolling
-                        horizontalArrangement = Arrangement.spacedBy(16.dp) // Space between columns
-                    ) {
-
-                        Column(
-                            modifier = Modifier.width(300.dp), // Set a fixed width for the column
-                            horizontalAlignment = Alignment.Start
-                        ) {
-                            Text(
-                                text = "Apa itu stunting?",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 23.sp,
-                                fontWeight = FontWeight.Bold
+                            .width(300.dp)
+                            .height(200.dp)
+                            .border(
+                                width = 4.dp,
+                                color = Color.Green,
+                                shape = RoundedCornerShape(8.dp)
                             )
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
+//                            .background(
+//                                color = Color(0xFF90EE90),
+//                                shape = RoundedCornerShape(8.dp)
+//                            )
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.stunting),
+                                contentDescription = "Stunting",
+                                modifier = Modifier.size(100.dp)
+                            )
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.stunting),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(100.dp)
+                                Text(
+                                    text = "Apa itu Stunting?",
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.SemiBold
                                 )
-                                Spacer(modifier = Modifier.width(16.dp))
-                                Column {
-                                    Text(
-                                        text = "Stunting adalah kondisi gagal tumbuh pada anak akibat kekurangan gizi kronis, terutama pada periode awal kehidupan, yaitu 1.000 hari pertama kehidupan (sejak kehamilan hingga usia dua tahun).",
-                                        color = MaterialTheme.colorScheme.onBackground,
-                                        fontSize = 14.sp,
-                                        lineHeight = 20.sp
-                                    )
-                                    Spacer(modifier = Modifier.height(8.dp))
-                                    Text(
-                                        text = "Baca Selengkapnya",
-                                        color = Color.Blue,
-                                        fontSize = 14.sp,
-                                        modifier = Modifier.clickable {
-                                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://drive.google.com/file/d/14JKJ_LMPq-oceqFBNV1O9YE59O6Xfbte/view?usp=drive_link"))
-                                            context.startActivity(intent)
-                                        }
-                                    )
-                                }
+                                Text(
+                                    text = "Stunting adalah kondisi gagal tumbuh pada anak akibat kekurangan gizi kronis.",
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Normal
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = "Baca Selengkapnya",
+                                    color = Color.Blue,
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.clickable {
+                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://drive.google.com/file/d/14JKJ_LMPq-oceqFBNV1O9YE59O6Xfbte/view?usp=drive_link"))
+                                        context.startActivity(intent)
+                                    }
+                                )
+
                             }
                         }
+                    }
+
+                    Spacer(modifier = Modifier.width(16.dp))
 
 
-                        Column(
-                            modifier = Modifier.width(300.dp), // Set a fixed width for the column
-                            horizontalAlignment = Alignment.Start
-                        ) {
-                            Text(
-                                text = "Panduan orang tua",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 23.sp,
-                                fontWeight = FontWeight.Bold
+                    Box(
+                        modifier = Modifier
+                            .width(300.dp)
+                            .height(200.dp)
+                            .border(
+                                width = 4.dp,
+                                color = Color.Green,
+                                shape = RoundedCornerShape(8.dp)
                             )
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
+//                            .background(
+//                                color = Color(0xFF90EE90),
+//                                shape = RoundedCornerShape(8.dp)
+//                            )
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.parents),
+                                contentDescription = "Panduan Orang Tua",
+                                modifier = Modifier.size(100.dp)
+                            )
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.parents),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(100.dp)
+                                Text(
+                                    text = "Panduan Orang Tua",
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.SemiBold
                                 )
-                                Spacer(modifier = Modifier.width(16.dp))
-                                Column {
-                                    Text(
-                                        text = "Panduan ini memberikan tips dan langkah-langkah praktis bagi orang tua untuk mendukung tumbuh kembang anak secara optimal.",
-                                        color = MaterialTheme.colorScheme.onBackground,
-                                        fontSize = 14.sp,
-                                        lineHeight = 20.sp
-                                    )
-                                    Spacer(modifier = Modifier.height(8.dp))
-                                    Text(
-                                        text = "Baca Selengkapnya",
-                                        color = Color.Blue,
-                                        fontSize = 14.sp,
-                                        modifier = Modifier.clickable {
-                                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://drive.google.com/file/d/1etmI1rJSGzucyoAFocOH-eo_7TuPRRT_/view?usp=sharing"))
-                                            context.startActivity(intent)
-                                        }
-                                    )
-                                }
+                                Text(
+                                    text = "Panduan ini memberikan tips bagi orang tua untuk mendukung tumbuh kembang anak.",
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Normal
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = "Baca Selengkapnya",
+                                    color = Color.Blue,
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.clickable {
+                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://drive.google.com/file/d/1etmI1rJSGzucyoAFocOH-eo_7TuPRRT_/view?usp=sharing"))
+                                        context.startActivity(intent)
+                                    }
+                                )
                             }
                         }
                     }
                 }
+
                 Spacer(modifier = Modifier.height(25.dp))
 
-                // Article Section
+                // Artikel Section
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
                         text = "Artikel",
@@ -239,10 +265,12 @@ fun HomePage(navController: NavController, viewModel: UserViewModel = viewModel(
                 }
             }
 
+            // Bottom Navigation
             BottomNavigationBar(modifier = Modifier.align(Alignment.BottomCenter), navController)
         }
     }
 }
+
 
 fun extractNameFromEmail(email: String): String {
     return email.substringBefore("@")
@@ -256,45 +284,50 @@ fun ArticleItem(article: Article) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .background(Color.LightGray, shape = RoundedCornerShape(8.dp))
+            .padding(bottom = 30.dp)
             .clickable {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(article.urlWeb))
                 context.startActivity(intent)
             }
             .padding(16.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (article.urlImage != "kosong") {
                 Image(
                     painter = rememberAsyncImagePainter(article.urlImage),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(80.dp)
-                        .background(Color.Gray, RoundedCornerShape(4.dp))
+                        .fillMaxWidth()
+                        .height(200.dp)
+
                 )
             } else {
                 Box(
                     modifier = Modifier
-                        .size(80.dp)
+                        .size(120.dp)
                         .background(Color.Gray, RoundedCornerShape(4.dp))
                 )
             }
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            Column {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(
                     text = article.title,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
 
             }
         }
     }
 }
+
 
 @Composable
 fun BottomNavigationBar(modifier: Modifier = Modifier, navController: NavController) {
