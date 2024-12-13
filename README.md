@@ -7,3 +7,9 @@ GroUp! is an application designed to help housewives and families with children 
 This repository contains the source code for an application API built using Node.js, Express, and machine learning models. The API provides endpoints to access data from a machine learning database and deploy machine learning models.
 
 # Branches
+
+This repository has the following branches:
+
+main: our base branches contains the backup program for our Mobile Dev.
+
+backend: Contains the API built with Node.js and Express to access data from the database. Contains the API for deploying machine learning models.. This branch is deployed to Cloud Functions.
