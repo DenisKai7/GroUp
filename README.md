@@ -13,3 +13,5 @@ This repository has the following branches:
 main: our base branches contains the backup program for our Mobile Dev.
 
 backend: Contains the API built with Node.js and Express to access data from the database. Contains the API for deploying machine learning models.. This branch is deployed to Cloud Functions.
+
+dataset: Contains the dataset which the one dataset we used to build ML model.
