@@ -2,7 +2,7 @@
 
 ## POST Predicts Stunting Api
 
-Endpoint: POST api/predicts/stunting
+Endpoint: POST /api/predicts/stunting
 
 Requset Body:
 
@@ -39,9 +39,9 @@ Response Body Erros:
 }
 ```
 
-## POST Predicts Stunting Api
+## POST Predicts Similiarity Stunting Api
 
-Endpoint: POST api/predicts/similiarity
+Endpoint: POST /api/predicts/similiarity
 
 Requset Body:
 
@@ -60,11 +60,10 @@ Respone Body Success:
 ```json
 {
   "data": {
-    "name": "test",
-    "age": "16",
-    "weight": "0.5",
-    "height": "0.10",
-    "gender": "Male",
+    "age": "10",
+    "weight": "12",
+    "height": "20",
+    "gender": "Female",
     "status": "stunting"
   }
 }

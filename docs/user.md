@@ -2,7 +2,7 @@
 
 ## Register User Api
 
-Endpoint: POST api/users
+Endpoint: POST /api/users
 
 Request Body:
 
@@ -35,7 +35,7 @@ Response Body Erros:
 
 ## Login User Api
 
-Endpoint: POST api/users/login
+Endpoint: POST /api/users/login
 
 Request Body:
 
@@ -67,7 +67,7 @@ Response Body Erros:
 
 ## Update User Api
 
-Endpoint: PATCH api/users/current
+Endpoint: PATCH /api/users/current
 
 - Authorization: Bearer "your_accessToken"
 
@@ -101,7 +101,7 @@ Response Body Erros:
 
 ## Get User Api
 
-Endpoint: GET api/users/current
+Endpoint: GET /api/users/current
 
 Headers:
 
@@ -129,7 +129,7 @@ Response Body Erros:
 
 ## Logout User Api
 
-Endpoint: DELETE api/users/logout
+Endpoint: DELETE /api/users/logout
 
 Headers:
 
