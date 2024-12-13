@@ -12,6 +12,10 @@ This repository has the following branches:
 
 main and master: our base branches contains the backup program for our Mobile Dev.
 
-backend: Contains the API built with Node.js and Express to access data from the database. Contains the API for deploying machine learning models.. This branch is deployed to Cloud Functions.
+backend: Contains the API built with Node.js and Express to access data from the database. Contains the API for deploying machine learning models. This branch is deployed to Cloud Functions.
 
 dataset: Contains the dataset which the one dataset we used to build ML model.
+
+scraping-articles : Contains the API built with Node.js and Express to access the Articles or Journals data from WHO and the others information about stunting.
+
+ml-training : Contains the ML training and modeling. in the ml-training also contains 2 models.
