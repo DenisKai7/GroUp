@@ -2,7 +2,7 @@
 
 ## GET Scraping Api
 
-Endpoint: Get /api/scraping
+Endpoint: GET /api/scraping
 
 Response Body Success:
 
